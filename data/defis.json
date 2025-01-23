@@ -1,0 +1,32 @@
+{
+    "defi1": {
+        "plateau": {
+            "taille": 5,
+            "monstres_visibles": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    4
+                ]
+            ]
+        },
+        "pieces": [
+            {
+                "forme": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        1,
+                        0
+                    ]
+                ],
+                "rotation": 4
+            }
+        ]
+    }
+}

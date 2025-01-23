@@ -1,0 +1,7 @@
+<instance format="XCSP3" type="CSP">
+  <variables>
+    <array id="x" size="[2]"> 0..4 </array>
+    <array id="y" size="[2]"> 0..4 </array>
+    <array id="rotation" size="[2]"> 0..3 </array>
+  </variables>
+</instance>
