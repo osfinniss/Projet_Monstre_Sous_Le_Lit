@@ -8,22 +8,31 @@ def charger_defi():
 
 def lancer_interface():
     defi = charger_defi()
-    taille = defi["plateau"]["taille"]
+    taille = 3  # Taille fixe pour les 4 grilles
     monstres = defi["plateau"]["monstres_visibles"]
 
     root = tk.Tk()
     root.title("Monstres sous le lit")
-    canvas = tk.Canvas(root, width=500, height=500)
-    canvas.pack()
 
-    grille = [[0 for _ in range(taille)] for _ in range(taille)]
+    canvas_list = []
+    grille_list = []
 
-    def placer_tuile(event):
+    for k in range(4):
+        canvas = tk.Canvas(root, width=300, height=300)
+        canvas.grid(row=k//2, column=k%2, padx=20, pady=20)  # Ajout de marges
+        canvas_list.append(canvas)
+        grille = [[0 for _ in range(taille)] for _ in range(taille)]
+        grille_list.append(grille)
+
+    def placer_tuile(event, canvas_index):
         x, y = event.x // 100, event.y // 100
+        grille = grille_list[canvas_index]
         grille[y][x] = 1 if grille[y][x] == 0 else 0
-        dessiner_grille()
+        dessiner_grille(canvas_index)
 
-    def dessiner_grille():
+    def dessiner_grille(canvas_index):
+        canvas = canvas_list[canvas_index]
+        grille = grille_list[canvas_index]
         canvas.delete("all")
         for i in range(taille):
             for j in range(taille):
@@ -33,12 +42,28 @@ def lancer_interface():
             canvas.create_oval(mx * 100 + 40, my * 100 + 40, mx * 100 + 60, my * 100 + 60, fill="red")
 
     def verifier_solution():
-        solution_correcte = all(grille[y][x] == 1 for x, y in monstres)
+        solution_correcte = all(grille[y][x] == 1 for grille in grille_list for x, y in monstres)
         messagebox.showinfo("Résultat", "Solution correcte!" if solution_correcte else "Essayez encore!")
 
-    canvas.bind("<Button-1>", placer_tuile)
-    dessiner_grille()
+    def rotation_gauche():
+        for grille in grille_list:
+            grille[:] = [list(reversed(col)) for col in zip(*grille)]
+        for i in range(4):
+            dessiner_grille(i)
 
-    tk.Button(root, text="Vérifier", command=verifier_solution).pack()
-    tk.Button(root, text="Réinitialiser", command=lancer_interface).pack()
+    def rotation_droite():
+        for grille in grille_list:
+            grille[:] = [list(col) for col in zip(*reversed(grille))]
+        for i in range(4):
+            dessiner_grille(i)
+
+    for i in range(4):
+        canvas_list[i].bind("<Button-1>", lambda event, index=i: placer_tuile(event, index))
+        dessiner_grille(i)
+
+    tk.Button(root, text="Rotation Gauche", command=rotation_gauche).grid(row=2, column=0, pady=20)
+    tk.Button(root, text="Rotation Droite", command=rotation_droite).grid(row=2, column=1, pady=20)
+    tk.Button(root, text="Vérifier", command=verifier_solution).grid(row=3, column=0, pady=20)
+    tk.Button(root, text="Réinitialiser", command=lancer_interface).grid(row=3, column=1, pady=20)
+
     root.mainloop()
