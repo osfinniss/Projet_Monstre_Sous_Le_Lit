@@ -1,7 +1,8 @@
 <instance format="XCSP3" type="CSP">
   <variables>
-    <array id="x" size="[2]"> 0..4 </array>
-    <array id="y" size="[2]"> 0..4 </array>
-    <array id="rotation" size="[2]"> 0..3 </array>
+    <array id="x" note="Variables pour chaque pièce" size="[3]"> 0..2 </array>
+    <array id="y" size="[3]"> 0..2 </array>
+    <array id="r" size="[3]"> 0..3 </array>
+    <array id="plateau_vars" note="Matrice du plateau" size="[3][3]"> 0 1 </array>
   </variables>
 </instance>

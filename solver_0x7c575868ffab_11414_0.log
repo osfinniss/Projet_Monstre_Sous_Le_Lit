@@ -1,0 +1,60 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:main
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:2  values:48  sizes:[2:16,4:4]
+  [94mvariables[0m
+    count:20  omitted:1  arrays:5  degrees:[2:2,3:13,4:5]
+  [94mconstraints[0m
+    count:10  specific:10  arities:[1:5,2:2,18:3]
+    distribution:[ElementMatrixCst:3,Extension1:5,Sub2EQ:2]
+    wck:0.15  cpu:0.572  mem:13M926
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:0.17  cpu:0.587  mem:16M974
+
+  [94mpreprocessing[0m
+    effs:6  values:41  removedByAC:7  unsat:false
+    wck:0.001  cpu:0.587  mem:16M974
+
+    run1  dpts:-1..19  effs:11  wck:0.00  sols:1
+
+  [94mglobal[0m
+    effs:11
+    stop:REACHED_GOAL  sols:1  sol1Cpu:0.588
+    wck:0.17  cpu:0.59  mem:16M974
+
+
+  Solution 1 in JSON format:
+   {
+    x: [0],
+    y: [0],
+    r: [*],
+    plateau_vars: [
+     [1, 1, 0, 0],
+     [1, 1, 0, 0],
+     [0, 1, 0, 0],
+     [1, 0, 0, 0]
+    ],
+    aux_gb: [1, 1]
+   }
+
+[92ms SATISFIABLE[0m
+[92m
+v[0m <instantiation id='sol1' type='solution'> <list> x[] y[] r[] plateau_vars[][] aux_gb[] </list> <values> 0   0   *   1 1 0 0 1 1 0x3 1 0 0 1 0x3   1 1 </values> </instantiation>
+[92m
+d WRONG DECISIONS[0m 0
+[92md FOUND SOLUTIONS[0m 1
+[91md INCOMPLETE EXPLORATION[0m
+
+c real time : 0.595

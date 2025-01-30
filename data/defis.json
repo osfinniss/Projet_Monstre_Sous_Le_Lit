@@ -1,15 +1,15 @@
 {
     "defi1": {
         "plateau": {
-            "taille": 5,
+            "taille": 3,
             "monstres_visibles": [
                 [
-                    1,
+                    0,
                     2
                 ],
                 [
-                    3,
-                    4
+                    1,
+                    1
                 ]
             ]
         },
@@ -25,7 +25,50 @@
                         0
                     ]
                 ],
-                "rotation": 4
+                "rotation": 1
+            },
+            {
+                "forme": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        1,
+                        1
+                    ]
+                ],
+                "rotation": 3
+            }
+        ]
+    },
+    "defi2": {
+        "plateau": {
+            "taille": 5,
+            "monstres_visibles": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    3,
+                    0
+                ]
+            ]
+        },
+        "pieces": [
+            {
+                "forme": [
+                    [
+                        1,
+                        1
+                    ],
+                    [
+                        1,
+                        0
+                    ]
+                ],
+                "rotation": 3
             }
         ]
     }
