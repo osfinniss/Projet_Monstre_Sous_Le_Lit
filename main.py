@@ -6,13 +6,13 @@ def main():
     print("Bienvenue dans le jeu Monstres sous le lit !")
     choix = input("Voulez-vous (1) résoudre un défi ou (2) générer un défi ? ")
     if choix == "1":
-        resoudre_defi("data/defis.json")
+        resoudre_defi("data/defi1.json")
     elif choix == "2":
         generer_defi()
     else:
         print("Choix invalide.")
 
 if __name__ == "__main__":
-    lancer_interface()
     main()
+    #lancer_interface()
 
