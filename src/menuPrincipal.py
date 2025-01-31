@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage
+from PIL import Image, ImageTk
 
 def lancer_menu_principal():
     global root, window_width, window_height, screen_width, screen_height, x_position, y_position
@@ -41,6 +42,32 @@ def afficher_menu_defis():
     root.geometry(f"{window_width}x{new_height}+{x_position}+{(screen_height - new_height) // 2}")
 
     frames = []
+
+    # D D D D
+    # D B
+    # D D C T
+    # D D Y Y
+
+    # D : 0
+    # B : 1
+    # C : 2
+    # T : 3
+    # Y : 4
+
+    images_path = [
+        "data/monsters/diable.png",
+        "data/monsters/bat.png",
+        "data/monsters/champi.png",
+        "data/monsters/troll.png",
+        "data/monsters/yeti.png"
+    ]
+
+    challenges_monsters = [
+        [0, 0, 0, 0],
+        [0, 1],
+        [0, 0, 2, 3],
+        [0, 0, 4, 4]
+    ]
     
     # Suppression des widgets existants
     for widget in root.winfo_children():
@@ -64,9 +91,21 @@ def afficher_menu_defis():
         image_frame = tk.Frame(frame, bg="#003366")
         image_frame.pack(side="right", padx=20)
         
-        for _ in range(4):
-            img_label = tk.Label(image_frame, text="[IMG]", bg="white", width=10, height=5)
-            img_label.pack(side="left", padx=5)
+        for monster in challenges_monsters[i]:
+            # Charger l'image avec PIL
+            image = Image.open(images_path[monster])
+
+            # Redimensionner l'image à 100x100 pixels
+            image_resized = image.resize((100, 100), Image.Resampling.LANCZOS)
+
+            # Convertir l'image redimensionnée en format compatible avec Tkinter
+            monster_image = ImageTk.PhotoImage(image_resized)
+
+            # Afficher l'image dans un label
+            monster_image_label = tk.Label(image_frame, image=monster_image, width=100, height=100, background="#003366")
+            monster_image_label.image = monster_image  # Préserver la référence pour éviter le garbage collection
+            monster_image_label.pack(side="left", padx=5)
+ 
         
         btn_overlay = tk.Button(frame, text="", bg="#003366", activebackground="#002244", bd=0, highlightthickness=0, command=lambda f=frame, i=i+1: on_click(f, i))
         btn_overlay.pack(fill="both", expand=True, padx=5, pady=5)
