@@ -11,7 +11,7 @@ class MenuPrincipal(tk.Frame):
 
 
         # Chargement du titre du jeu
-        image_path = "data/title.png"
+        image_path = "data/images/title.png"
         try:
             self.logo = tk.PhotoImage(file=image_path)
             self.logo_label = tk.Label(self, image=self.logo, bg="#004A9A", borderwidth=0, highlightthickness=0)

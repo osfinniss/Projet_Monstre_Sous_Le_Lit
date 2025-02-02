@@ -1,5 +1,6 @@
 import tkinter as tk
 from src.interfaces.MenuPrincipal import MenuPrincipal
+from src.interfaces.Resolution import Resolution
 
 class Application(tk.Tk):
     def __init__(self):
@@ -32,7 +33,12 @@ class Application(tk.Tk):
         
         # Charger la nouvelle interface
         self.interface = nouvelle_interface(self)
-        self.interface.pack(expand=True, fill="both")
+
+        # Vérifie si c'est l'interface "Resolution" et applique grid(), sinon pack()
+        if isinstance(self.interface, Resolution):
+            self.interface.grid(row=0, column=0, sticky="nsew")
+        else:
+            self.interface.pack(expand=True, fill="both")
 
 if __name__ == "__main__":
     app = Application()

@@ -6,14 +6,14 @@ from src.solveur import resoudre_defi
 class SelectionDefis(tk.Frame):
 
     images_path = [
-        "data/monsters/bat.png",
-        "data/monsters/champi.png",
-        "data/monsters/chien.png",
-        "data/monsters/diable.png",
-        "data/monsters/dino.png",
-        "data/monsters/slime.png",
-        "data/monsters/troll.png",
-        "data/monsters/yeti.png"
+        "data/images/monsters/bat.png",
+        "data/images/monsters/champi.png",
+        "data/images/monsters/chien.png",
+        "data/images/monsters/diable.png",
+        "data/images/monsters/dino.png",
+        "data/images/monsters/slime.png",
+        "data/images/monsters/troll.png",
+        "data/images/monsters/yeti.png"
     ]
 
     def __init__(self, controller):
@@ -37,10 +37,10 @@ class SelectionDefis(tk.Frame):
                 challenges_monsters.append(json.load(f)["monstres"])
 
         def on_click(frame, num_defi):
-            for i in range(4):
-                frames[i].config(bg="#003366")
-            frame.config(bg="#0055AA")  # Change la couleur de fond pour montrer la sélection
-            resoudre_defi(f"data/defis/defi{num_defi}.json")
+            # resoudre_defi(f"data/defis/defi{num_defi}.json")
+            from src.interfaces.Resolution import Resolution
+            self.controller.changer_interface(Resolution)
+
 
         
         # Création des zones de défis
