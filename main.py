@@ -24,10 +24,10 @@
 # if __name__ == "__main__":
 #     main()
 
-from tkinter import Tk
-from src.interface_game import Interface
+#from tkinter import Tk
+#from src.interface_game import Interface
 
-if __name__ == "__main__":
-    root = Tk()
-    app = Interface(root)
-    root.mainloop()
+#if __name__ == "__main__":
+ #   root = Tk()
+   # app = Interface(root)
+    #root.mainloop()

@@ -1,151 +1,126 @@
-# solveur.py
 from pycsp3 import *
-import numpy as np
 import json
-import random
 
-def rotation_piece(piece, rot):
-    """Applique une rotation à une pièce"""
-    for _ in range(rot):
-        piece = list(zip(*piece[::-1]))
-    return [list(row) for row in piece]
+#Renvoie la version de la pièce sur laquelle on a appliqué la rotation indiquée en paramètre
+#On suppose qu'une sous-grille est de taille 3*3
+def rotation(piece_originale,rotation):
+    piece_tournee =[]
 
-def verifier_solution_unique(taille, monstres, pieces):
-    """Vérifie si le défi a une solution unique"""
-    model = Model()
-    
-    # Créer les variables pour les positions des pièces
-    n_pieces = len(pieces)
-    x = VarArray(size=n_pieces, dom=range(taille))
-    y = VarArray(size=n_pieces, dom=range(taille))
-    r = VarArray(size=n_pieces, dom=range(4))
-    
-    # Créer la grille
-    grille = VarArray(size=[taille, taille], dom={0, 1})
-    
-    # Contraintes pour les pièces
-    for i in range(n_pieces):
-        piece = pieces[i]["forme"]
-        h, w = len(piece), len(piece[0])
-        
-        # Contraintes de limite du plateau
-        model += [x[i] + w <= taille]
-        model += [y[i] + h <= taille]
-        
-        # Contraintes de non-chevauchement
-        for j in range(i + 1, n_pieces):
-            model += [(x[i], y[i]) != (x[j], y[j])]
-    
-    # Contraintes pour les monstres
-    for mx, my in monstres:
-        model += [grille[my][mx] == 1]
-    
-    # Chercher toutes les solutions
-    solutions = []
-    def collector():
-        solutions.append((values(x), values(y), values(r)))
-    
-    satisfy(model)
-    solve(collector)
-    
-    return len(solutions) == 1
-
-def generer_defi_valide(taille=3):
-    """Génère un défi avec une solution unique"""
-    formes_pieces = [
-        [[1, 1],
-         [1, 0]],  # L
-        
-        [[1, 1],
-         [1, 1]],  # Carré
-        
-        [[1, 1, 1]],  # Ligne
-        
-        [[1, 0],
-         [1, 1]]   # L inversé
-    ]
-    
-    essais_max = 100
-    essais = 0
-    
-    while essais < essais_max:
-        essais += 1
-        
-        # Générer les monstres
-        n_monstres = random.randint(1, 2)
-        monstres = []
-        while len(monstres) < n_monstres:
-            x = random.randint(0, taille-1)
-            y = random.randint(0, taille-1)
-            if [x, y] not in monstres:
-                monstres.append([x, y])
-        
-        # Sélectionner une pièce
-        piece = random.choice(formes_pieces)
-        pieces = [{"forme": piece, "rotation": 0}]
-        
-        try:
-            if verifier_solution_unique(taille, monstres, pieces):
-                return {
-                    "plateau": {
-                        "taille": taille,
-                        "monstres_visibles": monstres
-                    },
-                    "pieces": pieces
-                }
-        except:
-            continue
-    
-    # Si aucun défi valide n'est trouvé, retourner un défi par défaut
-    return {
-        "plateau": {
-            "taille": 3,
-            "monstres_visibles": [[1, 1]]
-        },
-        "pieces": [{"forme": [[1, 1], [1, 0]], "rotation": 0}]
-    }
-
-def generer_defis(nb_defis):
-    """Génère plusieurs défis valides"""
-    defis = {}
-    for i in range(nb_defis):
-        defis[f"defi{i+1}"] = generer_defi_valide()
-    
-    # Sauvegarder les défis
-    with open("data/defis.json", "w") as f:
-        json.dump(defis, f, indent=4)
-    print(f"{nb_defis} défis générés avec succès.")
-
-def resoudre_defi(fichier_defis, id_defi="defi1"):
-    """Résout un défi spécifique"""
-    with open(fichier_defis, "r") as f:
-        defi = json.load(f)[id_defi]
-    
-    taille = defi["plateau"]["taille"]
-    monstres = defi["plateau"]["monstres_visibles"]
-    pieces = defi["pieces"]
-    
-    model = Model()
-    
-    # Variables
-    n_pieces = len(pieces)
-    x = VarArray(size=n_pieces, dom=range(taille))
-    y = VarArray(size=n_pieces, dom=range(taille))
-    r = VarArray(size=n_pieces, dom=range(4))
-    
-    # Contraintes
-    for i in range(n_pieces):
-        piece = pieces[i]["forme"]
-        h, w = len(piece), len(piece[0])
-        model += [x[i] + w <= taille]
-        model += [y[i] + h <= taille]
-    
-    # Résolution
-    if solve(model):
-        print("\nSolution trouvée!")
-        for i in range(n_pieces):
-            print(f"Pièce {i+1}: position ({values(x[i])}, {values(y[i])}) rotation {values(r[i])}")
-        return True
+    #Si la rotation est de 0°, on renvoie une pièce identique à la pièce originale
+    if rotation==0:
+        for i in range(len(piece_originale)):
+            piece_tournee.append(piece_originale[i])
+    #Si la rotation est de 90°
+    elif rotation==90:
+        for i in range(len(piece_originale)):
+            piece_tournee.append(3 * (piece_originale[i]%3) + 2 - (piece_originale[i]//3))
+    #Si la rotation est de 180°
+    elif rotation==180:
+        for i in range(len(piece_originale)):
+            piece_tournee.append(8-piece_originale[i])
+    #Sinon, la rotation est de 270°
     else:
-        print("Aucune solution trouvée.")
-        return False
+        for i in range(len(piece_originale)):
+            piece_tournee.append(3 * (2 - (piece_originale[i] % 3)) + (piece_originale[i] // 3))
+    return piece_tournee
+
+def resoudre_defi(fichier_defis):
+    with open(fichier_defis, "r") as f:
+        defi = json.load(f)["monstres"]
+    
+    for i in range(len(defi)):
+        print("defi[",i,"] vaut ", defi[i])
+    
+    #On représente la grille par 4 sous-grilles avec 9 cases
+    #Chaque entier représentera un monstre, -1 représentera une case vide
+    #Monstres:
+    #0=bat
+    #1=champi
+    #2=chien
+    #3=diable
+    #4=dino
+    #5=slime
+    #6=troll
+    #7=yeti
+
+    grille = [
+        [-1,1,4,7,-1,0,2,-1,-1],
+        [1,5,-1,-1,7,0,2,3,-1],
+        [1,4,3,7,0,-1,3,5,6],
+        [-1,-1,-1,5,1,6,7,3,0]
+    ]
+
+    #Chaque pièce est représentée par les indices des cases qu'elles recouvrent dans une sous-grille
+
+    #Vraies pièces
+    pieces = [
+        [0, 1, 3, 4, 5, 7, 8],  # pièce 1
+        [0, 1, 2, 3, 5, 6, 8],  # pièce 2
+        [0, 2, 3, 4, 5, 7, 8],  # pièce 3
+        [0, 2, 3, 4, 5, 6, 8]   # pièce 4
+    ]
+
+    # Pièces de test, qui ne nécessitent pas de rotation pour le défi 1
+    # pieces = [
+    #     [0, 1, 2, 3, 5, 6, 8],
+    #     [0, 1, 3, 4, 5, 6, 8],
+    #     [0, 1, 3, 4, 5, 7, 8],
+    #     [0, 2, 3, 4, 5, 6, 8]
+    # ]
+
+    # Nombre de cases visibles
+    nb_cases_visibles = sum(len(grille[i]) for i in range(len(grille))) - sum(len(pieces[i]) for i in range(len(pieces)))
+
+    # Variables de décision :
+    cases_visibles = VarArray(size=nb_cases_visibles, dom=range(-1, 8))
+        # cases_visibles contient les valeurs de toutes les cases visibles en fonction du placement des pièces,
+        # Toutes les cases non vides dans cases_visibles doivent former une permutation de defi pour résoudre le problème
+    x = VarArray(size=[len(grille), len(pieces)], dom={0, 1})  # x[i][j] = 1 si la pièce j est placée sur la sous-grille i, sinon 0
+    r = VarArray(size=[len(pieces)], dom={0,90,180,270})  # r[i] = la valeur de la rotation adoptée pour la pièce i (0,90,180,270)
+
+    # Contrainte : chaque pièce doit être placée exactement une fois
+    for j in range(len(pieces)):
+        satisfy(Sum([x[i][j] for i in range(len(grille))]) == 1)
+
+    # Contrainte : chaque grille doit avoir exactement une pièce
+    for i in range(len(grille)):
+        satisfy(Sum([x[i][j] for j in range(len(pieces))]) == 1)
+
+    # Contrainte : cases_visibles doit contenir chaque monstre autant de fois qu'il est présent dans defi
+    satisfy(Count(cases_visibles,value = monstre) == defi.count(monstre) for monstre in range(8))
+
+    # # Contrainte des cases visibles sans rotation
+    # # Contrainte : cases_visibles contient les cases qui sont visibles (non couvertes) en fonction du placement des pièces
+    # cases_visibles_index = 0
+    # for i in range(len(grille)):
+    #     for j in range(len(pieces)):
+    #         indices_cases_visibles = [k for k in range(len(grille[i])) if pieces[j].count(k)==0]
+    #         for k in range(len(indices_cases_visibles)):
+    #             satisfy(If(x[i][j]==1,Then = cases_visibles[cases_visibles_index] == grille[i][indices_cases_visibles[k]]))
+    #             cases_visibles_index+=1
+
+    # Contrainte des cases visibles avec rotation
+    # Contrainte : cases_visibles contient les cases qui sont visibles (non couvertes) en fonction du placement des pièces
+    cases_visibles_index = 0
+    for i in range(len(grille)):
+        for j in range(len(pieces)):
+            for k in {0,90,180,270}:
+                piece_tournee=rotation(pieces[j],k)
+                indices_cases_visibles = [l for l in range(len(grille[i])) if piece_tournee.count(l)==0]
+                for l in range(len(indices_cases_visibles)):
+                    satisfy(If(both(x[i][j]==1,r[j]==k),Then = cases_visibles[cases_visibles_index] == grille[i][indices_cases_visibles[l]]))
+                    cases_visibles_index+=1
+                cases_visibles_index-=len(indices_cases_visibles)
+        #On suppose que toutes les pièces couvrent le même nombre de cases
+        cases_visibles_index+=(len(grille[i])-len(pieces[0]))
+
+    # Résolution
+    if solve():
+        # Affichage des résultats
+        for i in range(len(grille)):
+            for j in range(len(pieces)):
+                print("x[",i,"][",j,"]=",x[i][j].value)
+                if x[i][j].value==1:
+                    print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
+    else:
+        print("Pas de solution trouvée.")

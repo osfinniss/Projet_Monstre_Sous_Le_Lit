@@ -1,0 +1,50 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:generateur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:3  values:120  sizes:[2:16,4:4,9:8]
+  [94mvariables[0m
+    count:28  arrays:3  degrees:[10:16,24:8,32:4]
+  [94mconstraints[0m
+    count:186  converted:128  specific:58  groups:2  arities:[1:48,3:128,4:8,8:2]
+    distribution:[ExactlyK:2,Extension1:48,ExtensionV-Matrix3D:128,SumSimpleEQ:8]
+    extStructures:(28,shared:100)
+    wck:0.60  cpu:1.178  mem:32M808
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:0.63  cpu:1.202  mem:35M396
+
+  [94mpreprocessing[0m
+    effs:48  revisions:(640,useless=640)  values:72  removedByAC:48  unsat:false
+    wck:0.011  cpu:1.21  mem:35M396
+
+    run1  dpts:4..9  effs:110  fails:10  wrgs:15  wck:0.00  ngds:3
+    run2  dpts:0..5  effs:187  fails:21  wrgs:28  wck:0.04  ngds:7
+    run3  dpts:0..5  effs:389  fails:33  wrgs:51  wck:0.05  ngds:8
+    run4  dpts:1..6  effs:552  fails:46  wrgs:73  wck:0.06  ngds:11
+    run5  dpts:0..5  effs:693  fails:60  wrgs:93  wck:0.07  ngds:11
+    run6  dpts:0..3  effs:887  fails:76  wrgs:115  wck:0.07  ngds:14
+    run7  dpts:0..0  effs:897  fails:79  wrgs:119  wck:0.07  ngds:14
+
+  [94mglobal[0m
+    effs:897  revisions:(19330,useless=18756)  ngds:14
+    stop:FULL_EXPLORATION  wrgs:119
+    wck:0.72  cpu:1.248  mem:35M983
+
+[92ms UNSATISFIABLE[0m
+[92m
+d WRONG DECISIONS[0m 119
+[92md FOUND SOLUTIONS[0m 0
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 1.25
