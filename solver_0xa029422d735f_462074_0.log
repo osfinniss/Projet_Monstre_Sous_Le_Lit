@@ -1,0 +1,57 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:solveur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:3  values:120  sizes:[2:16,4:4,9:8]
+  [94mvariables[0m
+    count:28  arrays:3  degrees:[10:16,24:8,32:4]
+  [94mconstraints[0m
+    count:179  converted:128  specific:51  groups:2  arities:[1:40,3:128,4:8,8:3]
+    distribution:[Exactly1:2,ExactlyK:1,Extension1:40,ExtensionV-Matrix3D:128,SumSimpleEQ:8]
+    extStructures:(28,shared:100)
+    wck:1.16  cpu:1.963  mem:32M329
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:1.29  cpu:2.015  mem:34M917
+
+  [94mpreprocessing[0m
+    effs:40  revisions:(640,useless=640)  values:80  removedByAC:40  unsat:false
+    wck:0.022  cpu:2.025  mem:34M917
+
+    run1  dpts:4..6  effs:73  fails:10  wrgs:12  wck:0.00  ngds:3
+    run2  dpts:4..6  effs:109  fails:21  wrgs:25  wck:0.08  ngds:7
+    run3  dpts:4..6  effs:146  fails:33  wrgs:39  wck:0.10  ngds:12
+    run4  dpts:4..6  effs:192  fails:46  wrgs:56  wck:0.12  ngds:16
+    run5  dpts:4..6  effs:244  fails:60  wrgs:74  wck:0.15  ngds:20
+    run6  dpts:4..8  effs:342  fails:76  wrgs:98  wck:0.17  ngds:24
+    run7  dpts:3..8  effs:488  fails:93  wrgs:122  wck:0.20  ngds:27
+    run8  dpts:5..10  effs:593  fails:112  wrgs:151  wck:0.23  ngds:32
+    run9  dpts:3..5  effs:699  fails:133  wrgs:178  wck:0.26  ngds:39
+    run10  dpts:3..8  effs:903  fails:156  wrgs:212  wck:0.27  ngds:42
+    run11  dpts:4..10  effs:1059  fails:181  wrgs:250  wck:0.28  ngds:50
+    run12  dpts:1..7  effs:1293  fails:209  wrgs:296  wck:0.29  ngds:53
+    run13  dpts:3..10  effs:1562  fails:240  wrgs:355  wck:0.31  ngds:55
+    run14  dpts:0..7  effs:1825  fails:273  wrgs:408  wck:0.33  ngds:55
+
+  [94mglobal[0m
+    effs:1825  revisions:(43866,useless=42889)  ngds:55
+    stop:FULL_EXPLORATION  wrgs:408
+    wck:1.64  cpu:2.139  mem:35M349
+
+[92ms UNSATISFIABLE[0m
+[92m
+d WRONG DECISIONS[0m 408
+[92md FOUND SOLUTIONS[0m 0
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 2.144

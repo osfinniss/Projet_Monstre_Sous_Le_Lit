@@ -1,0 +1,58 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:generateur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:3  values:120  sizes:[2:16,4:4,9:8]
+  [94mvariables[0m
+    count:28  arrays:3  degrees:[10:16,24:8,32:4]
+  [94mconstraints[0m
+    count:172  converted:128  specific:44  groups:2  arities:[1:32,3:128,4:8,8:4]
+    distribution:[Exactly1:4,Extension1:32,ExtensionV-Matrix3D:128,SumSimpleEQ:8]
+    extStructures:(28,shared:100)
+    wck:2.00  cpu:2.375  mem:32M296
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:2.04  cpu:2.414  mem:35M470
+
+  [94mpreprocessing[0m
+    effs:32  revisions:(640,useless=640)  values:88  removedByAC:32  unsat:false
+    wck:0.009  cpu:2.424  mem:35M470
+
+    run1  dpts:4..6  effs:88  fails:10  wrgs:18  wck:0.00  ngds:3
+    run2  dpts:4..6  effs:151  fails:21  wrgs:38  wck:0.04  ngds:7
+    run3  dpts:4..6  effs:232  fails:33  wrgs:62  wck:0.05  ngds:10
+    run4  dpts:4..6  effs:319  fails:46  wrgs:88  wck:0.08  ngds:14
+    run5  dpts:4..10  effs:416  fails:60  wrgs:109  wck:0.09  ngds:16
+    run6  dpts:3..6  effs:586  fails:76  wrgs:132  wck:0.11  ngds:21
+    run7  dpts:4..11  effs:720  fails:93  wrgs:166  wck:0.14  ngds:27
+    run8  dpts:2..8  effs:853  fails:112  wrgs:193  wck:0.15  ngds:29
+    run9  dpts:3..7  effs:1007  fails:133  wrgs:227  wck:0.16  ngds:31
+    run10  dpts:2..8  effs:1229  fails:156  wrgs:261  wck:0.18  ngds:35
+    run11  dpts:4..11  effs:1419  fails:181  wrgs:311  wck:0.19  ngds:39
+    run12  dpts:0..7  effs:1622  fails:209  wrgs:351  wck:0.21  ngds:42
+    run13  dpts:4..10  effs:1922  fails:240  wrgs:415  wck:0.23  ngds:49
+    run14  dpts:0..5  effs:2443  fails:274  wrgs:469  wck:0.24  ngds:53
+    run15  dpts:0..2  effs:2545  fails:284  wrgs:484  wck:0.27  ngds:53
+
+  [94mglobal[0m
+    effs:2545  revisions:(61424,useless=60164)  ngds:53
+    stop:FULL_EXPLORATION  wrgs:484
+    wck:2.31  cpu:2.565  mem:36M58
+
+[92ms UNSATISFIABLE[0m
+[92m
+d WRONG DECISIONS[0m 484
+[92md FOUND SOLUTIONS[0m 0
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 2.57

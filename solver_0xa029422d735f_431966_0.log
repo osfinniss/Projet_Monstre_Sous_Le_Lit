@@ -1,0 +1,36 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:generateur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:2  values:104  sizes:[2:16,9:8]
+  [94mvariables[0m
+    count:24  omitted:4  arrays:3  degrees:[2:16,8:8]
+  [94mconstraints[0m
+    count:44  specific:44  groups:2  arities:[1:32,4:8,8:4]
+    distribution:[Exactly1:4,Extension1:32,SumSimpleEQ:8]
+    wck:0.56  cpu:0.987  mem:14M930
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:0.59  cpu:1.006  mem:17M560
+
+  [94mpreprocessing[0m
+    effs:32  values:72  removedByAC:32  unsat:false
+    wck:0.001  cpu:1.007  mem:17M560
+
+    run1  dpts:4..6  effs:88  fails:10  wrgs:18  wck:0.00  ngds:3
+    run2  dpts:4..6  effs:151  fails:21  wrgs:38  wck:0.02  ngds:7
+    run3  dpts:4..6  effs:232  fails:33  wrgs:62  wck:0.02  ngds:10
+    run4  dpts:4..6  effs:319  fails:46  wrgs:88  wck:0.03  ngds:14
+[92mv[0m <instantiation id='sol1' type='solution'> <list> cases_visibles[] x[][] r[] </list> <values> -1 -1 7 -1 3 5 4 -1  0 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0  * * * * </values> </instantiation>
+[91m
+! ERROR (use -ev for more details)[0m

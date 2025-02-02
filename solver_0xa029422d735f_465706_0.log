@@ -1,0 +1,75 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:generateur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:3  values:120  sizes:[2:16,4:4,9:8]
+  [94mvariables[0m
+    count:28  arrays:3  degrees:[10:16,24:8,32:4]
+  [94mconstraints[0m
+    count:172  converted:128  specific:44  groups:2  arities:[1:32,3:128,4:8,8:4]
+    distribution:[Exactly1:4,Extension1:32,ExtensionV-Matrix3D:128,SumSimpleEQ:8]
+    extStructures:(28,shared:100)
+    wck:1.03  cpu:2.171  mem:32M257
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:1.08  cpu:2.215  mem:34M803
+
+  [94mpreprocessing[0m
+    effs:32  revisions:(640,useless=640)  values:88  removedByAC:32  unsat:false
+    wck:0.011  cpu:2.228  mem:34M803
+
+    run1  dpts:4..6  effs:88  fails:10  wrgs:18  wck:0.00  ngds:3
+    run2  dpts:4..6  effs:151  fails:21  wrgs:38  wck:0.04  ngds:7
+    run3  dpts:4..6  effs:232  fails:33  wrgs:62  wck:0.05  ngds:10
+    run4  dpts:4..6  effs:319  fails:46  wrgs:88  wck:0.06  ngds:14
+    run5  dpts:4..10  effs:416  fails:60  wrgs:109  wck:0.08  ngds:16
+    run6  dpts:4..8  effs:595  fails:76  wrgs:132  wck:0.10  ngds:19
+    run7  dpts:2..7  effs:699  fails:93  wrgs:156  wck:0.11  ngds:20
+    run8  dpts:1..7  effs:852  fails:112  wrgs:188  wck:0.12  ngds:23
+    run9  dpts:5..8  effs:986  fails:133  wrgs:224  wck:0.12  ngds:30
+    run10  dpts:2..7  effs:1139  fails:156  wrgs:264  wck:0.13  ngds:32
+    run11  dpts:3..10  effs:1318  fails:181  wrgs:305  wck:0.14  ngds:40
+    run12  dpts:2..8  effs:1548  fails:209  wrgs:347  wck:0.15  ngds:43
+    run13  dpts:4..11  effs:1848  fails:240  wrgs:404  wck:0.16  ngds:49
+    run14  dpts:4..9  effs:2095  fails:274  wrgs:455  wck:0.18  ngds:53
+    run15  dpts:0..6  effs:2435  fails:311  wrgs:508  wck:0.19  ngds:56
+    run16  dpts:3..8  effs:2771  fails:352  wrgs:571  wck:0.20  ngds:61
+    run17  dpts:7..27  effs:2796  fails:353  wrgs:572  wck:0.21  ngds:62  sols:1
+
+  [94mglobal[0m
+    effs:2796  revisions:(67735,useless=66310)  ngds:62
+    stop:REACHED_GOAL  wrgs:572  sols:1  sol1Cpu:2.428
+    wck:1.30  cpu:2.431  mem:35M906
+
+
+  Solution 1 in JSON format:
+   {
+    cases_visibles: [-1, -1, -1, 7, 4, 5, -1, 6],
+    x: [
+     [1, 0, 0, 0],
+     [0, 1, 0, 0],
+     [0, 0, 0, 1],
+     [0, 0, 1, 0]
+    ],
+    r: [90, 90, 90, 0]
+   }
+
+[92ms SATISFIABLE[0m
+[92m
+v[0m <instantiation id='sol1' type='solution'> <list> cases_visibles[] x[][] r[] </list> <values> -1x3 7 4 5 -1 6   1 0x4 1 0x5 1 0 0 1 0   90x3 0 </values> </instantiation>
+[92m
+d WRONG DECISIONS[0m 572
+[92md FOUND SOLUTIONS[0m 1
+[91md INCOMPLETE EXPLORATION[0m
+
+c real time : 2.451

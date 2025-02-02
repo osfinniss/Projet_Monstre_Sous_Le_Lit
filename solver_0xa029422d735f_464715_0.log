@@ -1,0 +1,44 @@
+
+[93mACE v2.3 [0m
+
+  [94minstance[0m
+    name:solveur
+
+  Loading variables...
+
+  Loading constraints...
+
+  [94mdomains[0m
+    types:3  values:120  sizes:[2:16,4:4,9:8]
+  [94mvariables[0m
+    count:28  arrays:3  degrees:[10:16,24:8,32:4]
+  [94mconstraints[0m
+    count:186  converted:128  specific:58  arities:[1:48,3:128,4:8,8:2]
+    distribution:[Exactly1:1,ExactlyK:1,Extension1:48,ExtensionV-Matrix3D:128,SumSimpleEQ:8]
+    extStructures:(28,shared:100)
+    wck:1.66  cpu:2.085  mem:32M346
+
+  Building solver... 
+
+  [94msolver[0m
+    guaranteedAC:true
+    wck:1.80  cpu:2.129  mem:34M934
+
+  [94mpreprocessing[0m
+    effs:48  revisions:(640,useless=640)  values:72  removedByAC:48  unsat:false
+    wck:0.032  cpu:2.141  mem:34M934
+
+    run1  dpts:0..3  effs:119  fails:10  wrgs:13  wck:0.00
+
+  [94mglobal[0m
+    effs:119  revisions:(2456,useless=2404)
+    stop:FULL_EXPLORATION  wrgs:13
+    wck:1.91  cpu:2.162  mem:35M365
+
+[92ms UNSATISFIABLE[0m
+[92m
+d WRONG DECISIONS[0m 13
+[92md FOUND SOLUTIONS[0m 0
+[92md COMPLETE EXPLORATION[0m
+
+c real time : 2.167
