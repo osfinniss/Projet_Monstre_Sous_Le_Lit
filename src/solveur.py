@@ -25,8 +25,15 @@ def rotation(piece_originale,rotation):
     return piece_tournee
 
 def resoudre_defi(fichier_defis):
-    with open(fichier_defis, "r") as f:
-        defi = json.load(f)["monstres"]
+    """Résout un défi à partir d'un fichier JSON ou d'une structure JSON en mémoire"""
+    if isinstance(fichier_defis, str):  # Si on passe un chemin de fichier
+        with open(fichier_defis, "r") as f:
+            defi = json.load(f)["monstres"]
+    elif isinstance(fichier_defis, dict):  # Si on passe un objet JSON déjà chargé
+        defi = fichier_defis["monstres"]
+    else:
+        raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
+
     
     for i in range(len(defi)):
         print("defi[",i,"] vaut ", defi[i])
@@ -127,7 +134,7 @@ def resoudre_defi(fichier_defis):
         # Affichage des résultats
         for i in range(len(grille)):
             for j in range(len(pieces)):
-                print("x[",i,"][",j,"]=",x[i][j].value)
+                # print("x[",i,"][",j,"]=",x[i][j].value)
                 if x[i][j].value==1:
                     print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
                     pieces_rotation[i+1] = [j+1, r[j].value]

@@ -21,13 +21,19 @@ class Resolution(tk.Frame):
 
     plateau_path="data/plateau1.json"
 
-    def __init__(self, controller, parametre):
+    def __init__(self, controller, num_defi, counter_values):
         super().__init__(controller)
         self.controller = controller
+        self.num_defi = num_defi
+        self.counter_values = counter_values
         self.config(bg="#004A9A")
-        self.num_defi = parametre
+        
+        if num_defi < 0:
+            self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values))
+        else:
+            self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json")
 
-        self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json")
+
 
         # Charger le plateau depuis le fichier JSON
         self.plateau = self.load_plateau(self.plateau_path)
@@ -118,6 +124,8 @@ class Resolution(tk.Frame):
             overlay_image = overlay_image.resize((grid_width, grid_height), Image.LANCZOS)
             # Appliquer la rotation
             overlay_image = overlay_image.rotate(rotation_angle, expand=False)
+
+            is_resolvable = all(value != [] for value in self.rotation_pieces.values())
         
             for row in range(3):
                 for col in range(3):
@@ -131,27 +139,33 @@ class Resolution(tk.Frame):
                     base_image = Image.open(image_path)
                     base_image = base_image.resize((cell_width, cell_height), Image.LANCZOS)
 
-                    # Découper la portion correspondante de l'overlay
-                    left = col * cell_width
-                    top = row * cell_height
-                    right = left + cell_width
-                    bottom = top + cell_height
-                    overlay_piece = overlay_image.crop((left, top, right, bottom))
+                    if is_resolvable:
+                        # Découper la portion correspondante de l'overlay
+                        left = col * cell_width
+                        top = row * cell_height
+                        right = left + cell_width
+                        bottom = top + cell_height
+                        overlay_piece = overlay_image.crop((left, top, right, bottom))
 
-                    # S'assurer que les deux images sont en RGBA
-                    if base_image.mode != 'RGBA':
-                        base_image = base_image.convert('RGBA')
-                    if overlay_piece.mode != 'RGBA':
-                        overlay_piece = overlay_piece.convert('RGBA')
+                        # S'assurer que les deux images sont en RGBA
+                        if base_image.mode != 'RGBA':
+                            base_image = base_image.convert('RGBA')
+                        if overlay_piece.mode != 'RGBA':
+                            overlay_piece = overlay_piece.convert('RGBA')
 
-                    # Combiner les images
-                    combined = Image.alpha_composite(base_image, overlay_piece)
+                        # Combiner les images
+                        combined = Image.alpha_composite(base_image, overlay_piece)
 
-                    # Afficher l'image combinée
-                    photo = ImageTk.PhotoImage(combined)
-                    cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                    cell.image = photo
-                    cell.grid(row=row, column=col)
+                        # Afficher l'image combinée
+                        photo = ImageTk.PhotoImage(combined)
+                        cell = tk.Label(parent, image=photo, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                        cell.image = photo
+                        cell.grid(row=row, column=col)
+                    else:
+                        cell = tk.Label(parent, image=base_image, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                        cell.image = photo
+                        cell.grid(row=row, column=col)
+                        
         else:
             # Si pas de pièce à superposer, afficher la grille normale
             for row in range(3):
@@ -173,3 +187,10 @@ class Resolution(tk.Frame):
         """Méthode pour revenir au menu principal"""
         from src.interfaces.MenuPrincipal import MenuPrincipal  # Import différé pour éviter la boucle
         self.controller.changer_interface(MenuPrincipal, resize=True)
+
+def convertir_monstres(counter_values):
+    """Convertit counter_values en une liste de monstres sous forme d'occurrences"""
+    monstres = []
+    for index, count in enumerate(counter_values):
+        monstres.extend([index] * count)  # Ajoute `count` fois le monstre `index+1`
+    return {"monstres": monstres}
