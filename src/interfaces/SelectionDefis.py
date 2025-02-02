@@ -1,7 +1,21 @@
 import tkinter as tk
+import json
 from PIL import Image, ImageTk
+from src.solveur import resoudre_defi
 
 class SelectionDefis(tk.Frame):
+
+    images_path = [
+        "data/monsters/bat.png",
+        "data/monsters/champi.png",
+        "data/monsters/chien.png",
+        "data/monsters/diable.png",
+        "data/monsters/dino.png",
+        "data/monsters/slime.png",
+        "data/monsters/troll.png",
+        "data/monsters/yeti.png"
+    ]
+
     def __init__(self, controller):
         super().__init__(controller)
         self.controller = controller
@@ -15,26 +29,19 @@ class SelectionDefis(tk.Frame):
         self.controller.geometry(f"{screen_width // 2}x{new_height}+{(screen_width - (screen_width // 2)) // 2}+{(screen_height - new_height) // 2}")
 
         frames = []
+        challenges_monsters = []
 
-        images_path = [
-            "data/monsters/diable.png",
-            "data/monsters/bat.png",
-            "data/monsters/champi.png",
-            "data/monsters/troll.png",
-            "data/monsters/yeti.png"
-        ]
+        for i in range(4):
+            challenge_path = f"data/defis/defi{i+1}.json"
+            with open(challenge_path, "r") as f:
+                challenges_monsters.append(json.load(f)["monstres"])
 
-        challenges_monsters = [
-            [0, 0, 0, 0],
-            [0, 1],
-            [0, 0, 2, 3],
-            [0, 0, 4, 4]
-        ]
-
-        def on_click(frame, defi):
+        def on_click(frame, num_defi):
             for i in range(4):
                 frames[i].config(bg="#003366")
             frame.config(bg="#0055AA")  # Change la couleur de fond pour montrer la sélection
+            resoudre_defi(f"data/defis/defi{num_defi}.json")
+
         
         # Création des zones de défis
         for i in range(4):
@@ -50,7 +57,7 @@ class SelectionDefis(tk.Frame):
             image_frame.pack(side="right", padx=20)
             
             for monster in challenges_monsters[i]:
-                image = Image.open(images_path[monster])
+                image = Image.open(self.images_path[monster])
                 image_resized = image.resize((100, 100), Image.Resampling.LANCZOS)
                 monster_image = ImageTk.PhotoImage(image_resized)
 

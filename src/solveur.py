@@ -13,10 +13,7 @@ def rotation(piece_originale,rotation):
     #Si la rotation est de 90°
     elif rotation==90:
         for i in range(len(piece_originale)):
-            if piece_originale[i] in {0,1,2,5}:
-                piece_tournee.append(piece_originale[i]+2)
-            elif piece_originale[i] in {3,6,7,8}:
-                piece_tournee.append(piece_originale[i]-2)
+            piece_tournee.append(3 * (piece_originale[i]%3) + 2 - (piece_originale[i]//3))
     #Si la rotation est de 180°
     elif rotation==180:
         for i in range(len(piece_originale)):
@@ -24,7 +21,7 @@ def rotation(piece_originale,rotation):
     #Sinon, la rotation est de 270°
     else:
         for i in range(len(piece_originale)):
-            piece_tournee.append(3*(piece_originale[i]%3) + 2 - (piece_originale[i]//3))
+            piece_tournee.append(3 * (2 - (piece_originale[i] % 3)) + (piece_originale[i] // 3))
     return piece_tournee
 
 def resoudre_defi(fichier_defis):
@@ -63,7 +60,7 @@ def resoudre_defi(fichier_defis):
         [0, 2, 3, 4, 5, 6, 8]   # pièce 4
     ]
 
-    # Pièces de test, qui ne nécessitent pas de rotation pour le défi
+    # Pièces de test, qui ne nécessitent pas de rotation pour le défi 1
     # pieces = [
     #     [0, 1, 2, 3, 5, 6, 8],
     #     [0, 1, 3, 4, 5, 6, 8],
@@ -113,6 +110,9 @@ def resoudre_defi(fichier_defis):
                 for l in range(len(indices_cases_visibles)):
                     satisfy(If(both(x[i][j]==1,r[j]==k),Then = cases_visibles[cases_visibles_index] == grille[i][indices_cases_visibles[l]]))
                     cases_visibles_index+=1
+                cases_visibles_index-=len(indices_cases_visibles)
+        #On suppose que toutes les pièces couvrent le même nombre de cases
+        cases_visibles_index+=(len(grille[i])-len(pieces[0]))
 
     # Résolution
     if solve():
