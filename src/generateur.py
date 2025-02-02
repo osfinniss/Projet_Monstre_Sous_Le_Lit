@@ -1,5 +1,6 @@
 import json
 import random
+import os
 
 def generer_grille():
     """
@@ -66,14 +67,22 @@ def resoudre_defi_temporaire(grille, pieces, defi):
     # Dans un vrai cas, il faudrait appeler un solveur CSP et compter les solutions.
     return [1]  # Supposons ici une solution unique pour simplifier
 
-def sauvegarder_defi(defi, fichier="defi.json"):
-    with open(fichier, "w") as f:
+def sauvegarder_defi(defi, dossier="data", fichier="defi.json"):
+    """
+    Sauvegarde le défi dans un fichier JSON dans le dossier spécifié.
+    """
+    # Vérifier si le dossier existe, sinon le créer
+    if not os.path.exists(dossier):
+        os.makedirs(dossier)
+    
+    chemin_fichier = os.path.join(dossier, fichier)
+    with open(chemin_fichier, "w") as f:
         json.dump(defi, f, indent=4)
 
 if __name__ == "__main__":
     defi_unique = generer_defi_unique()
     sauvegarder_defi(defi_unique)
-    print("Défi généré avec succès et sauvegardé dans 'defi.json'.")
+    print("Défi généré avec succès et sauvegardé dans 'data/defi.json'.")
     print("Solution du défi:")
     for i, sous_grille in enumerate(defi_unique["solution"]):
         print(f"Sous-grille {i + 1}: {sous_grille}")
