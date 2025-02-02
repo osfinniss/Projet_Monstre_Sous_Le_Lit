@@ -60,8 +60,15 @@ class Resolution(tk.Frame):
             frame.grid(row=i // 2, column=i % 2, padx=5, pady=5)
             self.create_grid(frame, i)
 
-        # Ajouter un Label "RESOLVABLE" en dessous de la grille
-        self.label_resolvable = tk.Label(self, text="[RESOLVABLE]", font=("Arial", 30, "bold"), bg="#004A9A", fg="white")
+        # Vérifier si toutes les sous-grilles ont une rotation
+        is_resolvable = all(value != [] for value in self.rotation_pieces.values())
+
+        # Ajouter un Label "(NON) RESOLVABLE" en dessous de la grille
+        if is_resolvable:
+            self.label_resolvable = tk.Label(self, text="RESOLVABLE", font=("Arial", 30, "bold"), bg="#004A9A", fg="white")
+        else:
+            self.label_resolvable = tk.Label(self, text="NON RESOLVABLE", font=("Arial", 30, "bold"), bg="#004A9A", fg="red")
+
         self.label_resolvable.grid(row=1, column=0, columnspan=2, pady=10)
         
         # Bouton retour
