@@ -27,7 +27,7 @@ class Resolution(tk.Frame):
         self.num_defi = num_defi
         self.counter_values = counter_values
         self.config(bg="#004A9A")
-        
+
         if num_defi < 0:
             self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values))
         else:
@@ -123,7 +123,7 @@ class Resolution(tk.Frame):
             # Redimensionner avant la rotation
             overlay_image = overlay_image.resize((grid_width, grid_height), Image.LANCZOS)
             # Appliquer la rotation
-            overlay_image = overlay_image.rotate(rotation_angle, expand=False)
+            overlay_image = overlay_image.rotate(-rotation_angle, expand=False, )
 
             is_resolvable = all(value != [] for value in self.rotation_pieces.values())
         
