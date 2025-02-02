@@ -26,19 +26,23 @@ class Application(tk.Tk):
         # Afficher le menu principal
         self.changer_interface(MenuPrincipal)
 
-    def changer_interface(self, nouvelle_interface, resize=False):
+    def changer_interface(self, nouvelle_interface, resize=False, parametre=None):
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
         
-        # Charger la nouvelle interface
-        self.interface = nouvelle_interface(self)
+        # Charger la nouvelle interface avec un paramètre optionnel
+        if parametre is not None:
+            self.interface = nouvelle_interface(self, parametre)
+        else:
+            self.interface = nouvelle_interface(self)
 
         # Vérifie si c'est l'interface "Resolution" et applique grid(), sinon pack()
         if isinstance(self.interface, Resolution):
             self.interface.grid(row=0, column=0, sticky="nsew")
         else:
             self.interface.pack(expand=True, fill="both")
+
 
 if __name__ == "__main__":
     app = Application()

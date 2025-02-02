@@ -1,7 +1,6 @@
 import tkinter as tk
 import json
 from PIL import Image, ImageTk
-from src.solveur import resoudre_defi
 
 class SelectionDefis(tk.Frame):
 
@@ -35,14 +34,7 @@ class SelectionDefis(tk.Frame):
             challenge_path = f"data/defis/defi{i+1}.json"
             with open(challenge_path, "r") as f:
                 challenges_monsters.append(json.load(f)["monstres"])
-
-        def on_click(frame, num_defi):
-            # resoudre_defi(f"data/defis/defi{num_defi}.json")
-            from src.interfaces.Resolution import Resolution
-            self.controller.changer_interface(Resolution)
-
-
-        
+      
         # Création des zones de défis
         for i in range(4):
             frame = tk.Frame(self, bg="#003366", height=new_height // 6, width=screen_width // 2)
@@ -65,7 +57,7 @@ class SelectionDefis(tk.Frame):
                 monster_image_label.image = monster_image
                 monster_image_label.pack(side="left", padx=5)
             
-            btn_overlay = tk.Button(frame, text="", bg="#003366", activebackground="#002244", bd=0, highlightthickness=0, command=lambda f=frame, i=i+1: on_click(f, i))
+            btn_overlay = tk.Button(frame, text="", bg="#003366", activebackground="#002244", bd=0, highlightthickness=0, command=lambda f=frame, i=i+1: self.go_to_resolution_defi(i))
             btn_overlay.pack(fill="both", expand=True, padx=5, pady=5)
 
         # Zone pour ajouter un défi
@@ -85,4 +77,9 @@ class SelectionDefis(tk.Frame):
         """Méthode pour aller au menu de création de défi"""
         from src.interfaces.CreationDefis import CreationDefis  # Import différé pour éviter la boucle
         self.controller.changer_interface(CreationDefis, resize=True)
+
+    def go_to_resolution_defi(self, num_defi):
+        """Méthode pour aller au menu de création de défi"""
+        from src.interfaces.Resolution import Resolution  # Import différé pour éviter la boucle
+        self.controller.changer_interface(Resolution, resize=True, parametre=num_defi)
 

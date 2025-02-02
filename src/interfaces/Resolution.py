@@ -1,6 +1,8 @@
 import tkinter as tk
 import json
 from PIL import Image, ImageTk
+from src.solveur import resoudre_defi
+
 
 class Resolution(tk.Frame):
 
@@ -17,13 +19,18 @@ class Resolution(tk.Frame):
 
     blank_image_path = "data/images/blank.png"
 
-    def __init__(self, controller, json_path="data/plateau1.json"):
+    plateau_path="data/plateau1.json"
+
+    def __init__(self, controller, parametre):
         super().__init__(controller)
         self.controller = controller
         self.config(bg="#004A9A")
+        self.num_defi = parametre
+
+        self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json")
 
         # Charger le plateau depuis le fichier JSON
-        self.plateau = self.load_plateau(json_path)
+        self.plateau = self.load_plateau(self.plateau_path)
 
         # Définir la largeur et la hauteur de la fenêtre
         cell_size = 100  # Taille d'une cellule
@@ -54,7 +61,7 @@ class Resolution(tk.Frame):
             self.create_grid(frame, i)
 
         # Ajouter un Label "RESOLVABLE" en dessous de la grille
-        self.label_resolvable = tk.Label(self, text="RESOLVABLE", font=("Arial", 30, "bold"), bg="#004A9A", fg="white")
+        self.label_resolvable = tk.Label(self, text="[RESOLVABLE]", font=("Arial", 30, "bold"), bg="#004A9A", fg="white")
         self.label_resolvable.grid(row=1, column=0, columnspan=2, pady=10)
         
         # Bouton retour
@@ -83,28 +90,78 @@ class Resolution(tk.Frame):
         """Crée une grille 3x3 pour afficher les images."""
         cell_width = 100
         cell_height = 100
+        grid_width = cell_width * 3
+        grid_height = cell_height * 3
 
         try:
             grille_data = self.plateau[index]["cases"]
         except IndexError:
             grille_data = [[-1] * 3 for _ in range(3)]  # Grille vide si erreur
 
-        for row in range(3):
-            for col in range(3):
-                value = grille_data[row][col]
-                image_path = ""
-                if value >= 0:
-                    image_path = self.images_path[value]
-                else:
-                    image_path = self.blank_image_path
-                image = Image.open(image_path)
-                image = image.resize((cell_width, cell_height), Image.LANCZOS)
-                photo = ImageTk.PhotoImage(image)
-                cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                cell.image = photo  # Référence pour éviter la suppression
-                cell.grid(row=row, column=col)
+        # Obtenir les informations de pièce et de rotation pour cette grille
+        piece_info = self.rotation_pieces.get(index + 1, [])  # index+1 pour correspondre à la grille 1,2,3,4
+        
+        # Charger et préparer l'image overlay si piece_info existe
+        if piece_info:
+            piece_num, rotation_angle = piece_info
+            # Charger l'image de la pièce
+            overlay_path = f"data/images/pieces/piece{piece_num}.png"
+            overlay_image = Image.open(overlay_path)
+            # Redimensionner avant la rotation
+            overlay_image = overlay_image.resize((grid_width, grid_height), Image.LANCZOS)
+            # Appliquer la rotation
+            overlay_image = overlay_image.rotate(rotation_angle, expand=False)
+        
+            for row in range(3):
+                for col in range(3):
+                    # Obtenir l'image de base de la cellule
+                    value = grille_data[row][col]
+                    image_path = ""
+                    if value >= 0:
+                        image_path = self.images_path[value]
+                    else:
+                        image_path = self.blank_image_path
+                    base_image = Image.open(image_path)
+                    base_image = base_image.resize((cell_width, cell_height), Image.LANCZOS)
 
+                    # Découper la portion correspondante de l'overlay
+                    left = col * cell_width
+                    top = row * cell_height
+                    right = left + cell_width
+                    bottom = top + cell_height
+                    overlay_piece = overlay_image.crop((left, top, right, bottom))
 
+                    # S'assurer que les deux images sont en RGBA
+                    if base_image.mode != 'RGBA':
+                        base_image = base_image.convert('RGBA')
+                    if overlay_piece.mode != 'RGBA':
+                        overlay_piece = overlay_piece.convert('RGBA')
+
+                    # Combiner les images
+                    combined = Image.alpha_composite(base_image, overlay_piece)
+
+                    # Afficher l'image combinée
+                    photo = ImageTk.PhotoImage(combined)
+                    cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                    cell.image = photo
+                    cell.grid(row=row, column=col)
+        else:
+            # Si pas de pièce à superposer, afficher la grille normale
+            for row in range(3):
+                for col in range(3):
+                    value = grille_data[row][col]
+                    image_path = ""
+                    if value >= 0:
+                        image_path = self.images_path[value]
+                    else:
+                        image_path = self.blank_image_path
+                    image = Image.open(image_path)
+                    image = image.resize((cell_width, cell_height), Image.LANCZOS)
+                    photo = ImageTk.PhotoImage(image)
+                    cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                    cell.image = photo
+                    cell.grid(row=row, column=col)    
+    
     def retour_menu_principal(self):
         """Méthode pour revenir au menu principal"""
         from src.interfaces.MenuPrincipal import MenuPrincipal  # Import différé pour éviter la boucle

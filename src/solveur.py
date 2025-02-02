@@ -116,11 +116,22 @@ def resoudre_defi(fichier_defis):
 
     # Résolution
     if solve():
+
+        pieces_rotation = {
+            1: [],
+            2: [],
+            3: [],
+            4: []
+        }
+
         # Affichage des résultats
         for i in range(len(grille)):
             for j in range(len(pieces)):
                 print("x[",i,"][",j,"]=",x[i][j].value)
                 if x[i][j].value==1:
                     print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
+                    pieces_rotation[i+1] = [j+1, r[j].value]
     else:
         print("Pas de solution trouvée.")
+    
+    return pieces_rotation
