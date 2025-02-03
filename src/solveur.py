@@ -26,6 +26,9 @@ def rotation(piece_originale,rotation):
 
 def resoudre_defi(fichier_defis):
     """Résout un défi à partir d'un fichier JSON ou d'une structure JSON en mémoire"""
+
+    clear()
+    
     if isinstance(fichier_defis, str):  # Si on passe un chemin de fichier
         with open(fichier_defis, "r") as f:
             defi = json.load(f)["monstres"]
