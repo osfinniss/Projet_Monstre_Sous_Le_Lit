@@ -1,7 +1,7 @@
 <instance format="XCSP3" type="CSP">
   <variables>
-    <array id="cases_visibles" size="[8]"> -1..7 </array>
-    <array id="x" size="[4][4]"> 0 1 </array>
+    <array id="cases_visibles" note="Variables de décision :" size="[8]"> -1..7 </array>
+    <array id="x" note="cases_visibles contient les valeurs de toutes les cases visibles en fonction du placement des pièces, Toutes les cases non vides dans cases_visibles doivent former une permutation de defi pour résoudre le problème" size="[4][4]"> 0 1 </array>
     <array id="r" size="[4]"> 0 90 180 270 </array>
   </variables>
   <constraints>
@@ -45,9 +45,9 @@
       </count>
       <args> 0 </args>
       <args> 1 </args>
-      <args> 2 </args>
       <args> 3 </args>
       <args> 6 </args>
+      <args> 7 </args>
     </group>
     <group>
       <count>
@@ -55,9 +55,9 @@
         <values> %0 </values>
         <condition> (eq,%1) </condition>
       </count>
-      <args> 4 2 </args>
+      <args> 2 2 </args>
+      <args> 4 1 </args>
       <args> 5 1 </args>
-      <args> 7 1 </args>
     </group>
     <intension> imp(and(eq(x[0][0],1),eq(r[0],0)),eq(cases_visibles[0],4)) </intension>
     <intension> imp(and(eq(x[0][0],1),eq(r[0],0)),eq(cases_visibles[1],2)) </intension>
