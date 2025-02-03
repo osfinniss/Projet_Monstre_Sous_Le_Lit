@@ -114,7 +114,7 @@ def resoudre_defi(fichier_defis):
     cases_visibles_index = 0
     for i in range(len(grille)):
         for j in range(len(pieces)):
-            for k in {0,90,180,270}:
+            for k in [0,90,180,270]:
                 piece_tournee=rotation(pieces[j],k)
                 indices_cases_visibles = [l for l in range(len(grille[i])) if piece_tournee.count(l)==0]
                 for l in range(len(indices_cases_visibles)):
