@@ -79,7 +79,7 @@ class Resolution(tk.Frame):
         
         # Bouton retour
         self.btn_retour = tk.Button(self, text="Retour", font=("Arial", 14, "bold"), bg="darkred", fg="white",
-                                    command=self.retour_menu_principal)
+                                    command=self.retour_menu_defis)
         self.btn_retour.grid(row=2, column=0, columnspan=2, pady=10)
 
         # Forcer l'expansion des lignes/colonnes pour le bon positionnement
@@ -183,10 +183,10 @@ class Resolution(tk.Frame):
                     cell.image = photo
                     cell.grid(row=row, column=col)    
     
-    def retour_menu_principal(self):
-        """Méthode pour revenir au menu principal"""
-        from src.interfaces.MenuPrincipal import MenuPrincipal  # Import différé pour éviter la boucle
-        self.controller.changer_interface(MenuPrincipal, resize=True)
+    def retour_menu_defis(self):
+        """Retourne à l'interface de sélection de défis"""
+        from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle d'import
+        self.controller.changer_interface(SelectionDefis)
 
 def convertir_monstres(counter_values):
     """Convertit counter_values en une liste de monstres sous forme d'occurrences"""

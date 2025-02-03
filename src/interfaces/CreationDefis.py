@@ -33,7 +33,7 @@ class CreationDefis(tk.Frame):
         self.config(bg="#003366")
 
         # Modifier la taille de la fenêtre
-        new_height = (controller.screen_height // 5) * 3
+        new_height = (controller.screen_height // 5) * 3 + 50
         controller.geometry(f"{controller.window_width}x{new_height}+{controller.x_position}+{(controller.screen_height - new_height) // 2}")
 
         self.frames = []
@@ -59,6 +59,11 @@ class CreationDefis(tk.Frame):
         btn_valider = tk.Button(self, text="Valider", font=("Arial", 14, "bold"), bg="green", fg="white",
                                 command=self.valider_defi, width=20)
         btn_valider.pack(side="right", padx=5, pady=20)
+
+        # Bouton Valider
+        btn_valider_avec_generation = tk.Button(main_frame, text="Valider (nouveau plateau et pièces)", font=("Arial", 14, "bold"), bg="blue", fg="white",
+                                command=self.valider_defi_avec_generations, width=50)
+        btn_valider_avec_generation.pack(side="bottom", padx=5, pady=5)
 
     def create_line(self, parent, start, end):
         """Crée une ligne avec plusieurs compteurs"""
@@ -112,7 +117,7 @@ class CreationDefis(tk.Frame):
             # Bouton pour incrémenter
             btn_increment = tk.Button(counter_frame, text="+", command=lambda i=i: self.update_counter(i, "increment"), **button_style)
             btn_increment.pack(side="left", padx=10)
-
+            
     def update_counter(self, index, operation):
         """Incrémente ou décrémente le compteur"""
         
@@ -163,3 +168,8 @@ class CreationDefis(tk.Frame):
         """Valide le défi créé"""
         from src.interfaces.Resolution import Resolution
         self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values)
+
+    def valider_defi_avec_generations(self):
+        """Valide le défi créé"""
+        from src.interfaces.OptionsGeneration import OptionsGenerations
+        self.controller.changer_interface(OptionsGenerations, num_defi=-1, counter_values=self.counter_values)
