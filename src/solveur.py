@@ -26,6 +26,9 @@ def rotation(piece_originale,rotation):
 
 def resoudre_defi(fichier_defis):
     """Résout un défi à partir d'un fichier JSON ou d'une structure JSON en mémoire"""
+
+    clear()
+    
     if isinstance(fichier_defis, str):  # Si on passe un chemin de fichier
         with open(fichier_defis, "r") as f:
             defi = json.load(f)["monstres"]
@@ -111,7 +114,7 @@ def resoudre_defi(fichier_defis):
     cases_visibles_index = 0
     for i in range(len(grille)):
         for j in range(len(pieces)):
-            for k in {0,90,180,270}:
+            for k in [0,90,180,270]:
                 piece_tournee=rotation(pieces[j],k)
                 indices_cases_visibles = [l for l in range(len(grille[i])) if piece_tournee.count(l)==0]
                 for l in range(len(indices_cases_visibles)):
