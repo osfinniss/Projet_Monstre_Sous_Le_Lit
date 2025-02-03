@@ -1,4 +1,7 @@
 import tkinter as tk
+import json
+import subprocess
+from PIL import Image, ImageTk
 
 class MenuPrincipal(tk.Frame):
     def __init__(self, controller):
@@ -8,7 +11,6 @@ class MenuPrincipal(tk.Frame):
 
         # Redimensionner la fenêtre à sa taille d'origine
         controller.geometry(f"{controller.window_width}x{controller.window_height}+{controller.x_position}+{controller.y_position}")
-
 
         # Chargement du titre du jeu
         image_path = "data/images/title.png"
@@ -42,4 +44,13 @@ class MenuPrincipal(tk.Frame):
         self.controller.changer_interface(SelectionDefis, resize=True)
     
     def generer_defi(self):
-        print("Générer un défi")
+        """Lance generateur.py et affiche les nouveaux défis après son exécution."""
+        try:
+            subprocess.run(["python3", "src/generateur.py"], check=True)
+        except subprocess.CalledProcessError as e:
+            print("Erreur lors de l'exécution du générateur:", e)
+            return
+
+        # Après l'exécution du générateur, afficher la sélection des défis validés
+        from src.interfaces.SelectionDefisValides import SelectionDefisValides  # Nouvelle interface
+        self.controller.changer_interface(SelectionDefisValides, resize=True)
