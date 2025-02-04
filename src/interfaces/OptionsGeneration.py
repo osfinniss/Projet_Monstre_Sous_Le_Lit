@@ -1,7 +1,6 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 
-class OptionsGenerations(tk.Frame):
+class OptionsGeneration(tk.Frame):
 
     def __init__(self, controller, num_defi, counter_values):
         super().__init__(controller)
@@ -48,8 +47,8 @@ class OptionsGenerations(tk.Frame):
 
 
     def resoudre_avec_generations(self, nouveauPlateau, nouvellesPieces):
-        """Retourne à l'interface de sélection de défis"""
-        print(f"Valider avec {nouveauPlateau} et {nouvellesPieces}")
+        from src.interfaces.CreationPieces import CreationPieces  # Import différé pour éviter la boucle d'import
+        self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)
 
     def retour_menu_defis(self):
         """Retourne à l'interface de sélection de défis"""

@@ -1,6 +1,7 @@
 import tkinter as tk
 from src.interfaces.MenuPrincipal import MenuPrincipal
 from src.interfaces.Resolution import Resolution
+from src.interfaces.CreationPieces import CreationPieces
 
 class Application(tk.Tk):
     def __init__(self):
@@ -40,7 +41,7 @@ class Application(tk.Tk):
             self.interface = nouvelle_interface(self)
 
         # Vérifie si c'est l'interface "Resolution" et applique grid(), sinon pack()
-        if isinstance(self.interface, Resolution):
+        if isinstance(self.interface, Resolution) or isinstance(self.interface, CreationPieces):
             self.interface.grid(row=0, column=0, sticky="nsew")
         else:
             self.interface.pack(expand=True, fill="both")
