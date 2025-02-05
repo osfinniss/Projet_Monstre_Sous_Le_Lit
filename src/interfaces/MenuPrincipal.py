@@ -31,19 +31,23 @@ class MenuPrincipal(tk.Frame):
                                       font=("Arial", 14, "bold"), bg="purple", fg="white", relief="raised", bd=5, padx=20, pady=10)
         self.btn_generer = tk.Button(button_frame, text="Générer un défi", command=self.choisir_parametres_generateur,
                                      font=("Arial", 14, "bold"), bg="purple", fg="white", relief="raised", bd=5, padx=20, pady=10)
-        self.btn_creer_plateau = tk.Button(button_frame, text="Générer un plateau", command=self.go_to_creation_plateau,
-                                           font=("Arial", 14, "bold"), bg="blue", fg="white", relief="raised", bd=5, padx=20, pady=10)
         self.btn_afficher_plateau = tk.Button(button_frame, text="Afficher le plateau", command=self.afficher_plateau,
                                               font=("Arial", 14, "bold"), bg="green", fg="white", relief="raised", bd=5, padx=20, pady=10)
+        self.btn_nouveau_jeu = tk.Button(button_frame, text="Générer nouveau jeu", command=self.nouveau_jeu,
+                                         font=("Arial", 14, "bold"), bg="cyan", fg="black", relief="raised", bd=5, padx=20, pady=10)
+        self.btn_resoudre_nouveau_jeu = tk.Button(button_frame, text="Résoudre un nouveau jeu", command=self.resoudre_nouveau_jeu,
+                                         font=("Arial", 14, "bold"), bg="cyan", fg="black", relief="raised", bd=5, padx=20, pady=10)
         self.btn_quitter = tk.Button(button_frame, text="Quitter", command=controller.quit,
                                      font=("Arial", 14, "bold"), bg="red", fg="white", relief="raised", bd=5, padx=20, pady=10)
 
         # Placement des boutons
         self.btn_resoudre.pack(pady=10)
         self.btn_generer.pack(pady=10)
-        self.btn_creer_plateau.pack(pady=10)
         self.btn_afficher_plateau.pack(pady=10)
+        self.btn_resoudre_nouveau_jeu.pack(pady=10)
+        self.btn_nouveau_jeu.pack(pady=10)
         self.btn_quitter.pack(pady=10)
+
 
     def go_to_defis(self):
         from src.interfaces.SelectionDefis import SelectionDefis
@@ -52,11 +56,14 @@ class MenuPrincipal(tk.Frame):
     def choisir_parametres_generateur(self):
         self.controller.changer_interface(GenerateurDefis)
 
-    def go_to_creation_plateau(self):
-        plateau_data = self.generer_plateau_aleatoire()
-        with open("data/plateau_aleatoire.json", "w") as f:
-            json.dump(plateau_data, f, indent=4)
-        messagebox.showinfo("Succès", "Plateau généré et sauvegardé avec succès!")
+      
+    def resoudre_nouveau_jeu(self):
+        from src.interfaces.ResolutionNewGame import ResolutionNewGame
+        self.controller.changer_interface(ResolutionNewGame,  resize=True, num_defi=1, defi_generated=None)
+    
+    def afficher_plateau(self):
+        from src.interfaces.AffichagePlateau import AffichagePlateau
+        self.controller.changer_interface(AffichagePlateau)
     
     def generer_plateau_aleatoire(self):
         return {
@@ -66,6 +73,15 @@ class MenuPrincipal(tk.Frame):
             ]
         }
     
-    def afficher_plateau(self):
-        from src.interfaces.AffichagePlateau import AffichagePlateau
-        self.controller.changer_interface(AffichagePlateau)
+    def nouveau_jeu(self):
+        # Générer un nouveau plateau
+        plateau_data = self.generer_plateau_aleatoire()
+        with open("data/plateau_nouveau.json", "w") as f:
+            json.dump(plateau_data, f, indent=4)
+        
+        # Générer de nouvelles pièces
+        pieces_data = {"pieces": [sorted(random.sample(range(9), 6)) for _ in range(4)]}
+        with open("data/pieces_nouvelles.json", "w") as f:
+            json.dump(pieces_data, f, indent=4)
+        
+        messagebox.showinfo("Nouveau Jeu", "Un nouveau jeu a été généré avec succès!")

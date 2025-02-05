@@ -3,10 +3,9 @@ from tkinter import ttk, messagebox
 
 class CreationPieces(tk.Frame):
 
-    def __init__(self, controller, num_defi, counter_values):
+    def __init__(self, controller, counter_values):
         super().__init__(controller)
         self.controller = controller
-        self.num_defi = num_defi
         self.counter_values = counter_values
         self.config(bg="#004A9A")
 
@@ -147,7 +146,7 @@ class CreationPieces(tk.Frame):
         json_pieces = {"pieces": self.pieces}
 
         from src.interfaces.Resolution import Resolution
-        self.controller.changer_interface(Resolution, num_defi=self.num_defi, counter_values=self.counter_values, fichier_pieces=json_pieces)
+        self.controller.changer_interface(Resolution, counter_values=self.counter_values, fichier_pieces=json_pieces)
 
     def retour_option_generation(self):
         from src.interfaces.OptionsGeneration import OptionsGeneration
