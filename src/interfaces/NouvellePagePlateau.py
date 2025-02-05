@@ -55,4 +55,3 @@ class NouvellePagePlateau(tk.Frame):
             json.dump(pieces_data, f, indent=4)
         
         messagebox.showinfo("Nouveau Jeu", "Un nouveau jeu a été généré avec succès!")
-

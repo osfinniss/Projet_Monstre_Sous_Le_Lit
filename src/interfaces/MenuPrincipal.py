@@ -43,6 +43,9 @@ class MenuPrincipal(tk.Frame):
         # Placement des boutons
         self.btn_resoudre.pack(pady=10)
         self.btn_generer.pack(pady=10)
+        self.btn_afficher_plateau.pack(pady=10)
+        self.btn_resoudre_nouveau_jeu.pack(pady=10)
+        self.btn_nouveau_jeu.pack(pady=10)
         self.btn_quitter.pack(pady=10)
 
 
