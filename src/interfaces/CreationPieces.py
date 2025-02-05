@@ -146,7 +146,7 @@ class CreationPieces(tk.Frame):
         json_pieces = {"pieces": self.pieces}
 
         from src.interfaces.Resolution import Resolution
-        self.controller.changer_interface(Resolution, num_defi=self.num_defi, counter_values=self.counter_values, fichier_pieces=json_pieces)
+        self.controller.changer_interface(Resolution, counter_values=self.counter_values, fichier_pieces=json_pieces)
 
     def retour_option_generation(self):
         from src.interfaces.OptionsGeneration import OptionsGeneration

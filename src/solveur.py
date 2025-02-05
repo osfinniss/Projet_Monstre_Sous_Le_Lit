@@ -40,8 +40,8 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
         raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
 
     
-    # for i in range(len(defi)):
-    #     print("defi[",i,"] vaut ", defi[i])
+    for i in range(len(defi)):
+        print("defi[",i,"] vaut ", defi[i])
     
     #On représente la grille par 4 sous-grilles avec 9 cases
     #Chaque entier représentera un monstre, -1 représentera une case vide
@@ -81,6 +81,11 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
     #     [0, 2, 3, 4, 5, 6, 8]
     # ]
 
+    # Pré-calcul des rotations des pièces
+    rotations_pieces = {
+        (j, k): rotation(pieces[j], k) for j in range(len(pieces)) for k in [0, 90, 180, 270]
+    }
+
     # Nombre de cases visibles
     nb_cases_visibles = sum(len(grille[i]) for i in range(len(grille))) - sum(len(pieces[i]) for i in range(len(pieces)))
 
@@ -93,11 +98,11 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
 
     # Contrainte : chaque pièce doit être placée exactement une fois
     for j in range(len(pieces)):
-        satisfy(Sum([x[i][j] for i in range(len(grille))]) == 1)
+        satisfy(ExactlyOne([x[i][j] for i in range(len(grille))]))
 
     # Contrainte : chaque grille doit avoir exactement une pièce
     for i in range(len(grille)):
-        satisfy(Sum([x[i][j] for j in range(len(pieces))]) == 1)
+        satisfy(ExactlyOne([x[i][j] for j in range(len(pieces))]))
 
     # Contrainte : cases_visibles doit contenir chaque monstre autant de fois qu'il est présent dans defi
     satisfy(Count(cases_visibles,value = monstre) == defi.count(monstre) for monstre in range(8))
@@ -118,7 +123,7 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
     for i in range(len(grille)):
         for j in range(len(pieces)):
             for k in [0,90,180,270]:
-                piece_tournee=rotation(pieces[j],k)
+                piece_tournee = rotations_pieces[(j, k)]
                 indices_cases_visibles = [l for l in range(len(grille[i])) if piece_tournee.count(l)==0]
                 for l in range(len(indices_cases_visibles)):
                     satisfy(If(both(x[i][j]==1,r[j]==k),Then = cases_visibles[cases_visibles_index] == grille[i][indices_cases_visibles[l]]))
@@ -128,7 +133,7 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
         cases_visibles_index+=(len(grille[i])-len(pieces[0]))
 
     # Résolution
-    if solve():
+    if solve(sols=1):
 
         pieces_rotation = {
             1: [],
@@ -142,7 +147,7 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
             for j in range(len(pieces)):
                 # print("x[",i,"][",j,"]=",x[i][j].value)
                 if x[i][j].value==1:
-                    # print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
+                    print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
                     pieces_rotation[i+1] = [j+1, r[j].value]
     else:
         print("Pas de solution trouvée.")

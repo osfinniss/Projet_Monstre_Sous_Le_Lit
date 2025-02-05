@@ -7,7 +7,7 @@ from src.interfaces.CreationDefis import CreationDefis
 from src.interfaces.CreationPieces import CreationPieces
 from src.interfaces.OptionsGeneration import OptionsGeneration
 
-DEFAULT_NUM_DEFI = None
+DEFAULT_NUM_DEFI = -1
 DEFAULT_COUNTER_VALUES = None
 DEFAULT_FICHIER_PIECES = "data/pieces.json"
 DEFAULT_DEFI_GENERATED = False
@@ -46,6 +46,8 @@ class Application(tk.Tk):
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
+
+        # self.interface.destroy()
 
         
         if nouvelle_interface in (CreationPieces, OptionsGeneration):
