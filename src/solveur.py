@@ -1,6 +1,8 @@
 from pycsp3 import *
 import json
 
+pieces_path = "data/pieces.json"
+
 #Renvoie la version de la pièce sur laquelle on a appliqué la rotation indiquée en paramètre
 #On suppose qu'une sous-grille est de taille 3*3
 def rotation(piece_originale,rotation):
@@ -24,7 +26,7 @@ def rotation(piece_originale,rotation):
             piece_tournee.append(3 * (2 - (piece_originale[i] % 3)) + (piece_originale[i] // 3))
     return piece_tournee
 
-def resoudre_defi(fichier_defis):
+def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
     """Résout un défi à partir d'un fichier JSON ou d'une structure JSON en mémoire"""
 
     clear()
@@ -62,13 +64,14 @@ def resoudre_defi(fichier_defis):
 
     #Chaque pièce est représentée par les indices des cases qu'elles recouvrent dans une sous-grille
 
-    #Vraies pièces
-    pieces = [
-        [0, 1, 3, 4, 5, 7, 8],  # pièce 1
-        [0, 1, 2, 3, 5, 6, 8],  # pièce 2
-        [0, 2, 3, 4, 5, 7, 8],  # pièce 3
-        [0, 2, 3, 4, 5, 6, 8]   # pièce 4
-    ]
+    # Récupérer les pièces
+    if isinstance(fichier_pieces, str):  # Si on passe un chemin de fichier
+        with open(fichier_pieces, "r") as f:
+            pieces = json.load(f)["pieces"]
+    elif isinstance(fichier_pieces, dict):  # Si on passe un objet JSON déjà chargé
+        pieces = fichier_pieces["pieces"]
+    else:
+        raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
 
     # Pièces de test, qui ne nécessitent pas de rotation pour le défi 1
     # pieces = [

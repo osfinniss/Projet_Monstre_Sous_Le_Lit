@@ -3,6 +3,10 @@ from src.interfaces.MenuPrincipal import MenuPrincipal
 from src.interfaces.Resolution import Resolution
 from src.interfaces.CreationPieces import CreationPieces
 
+DEFAULT_NUM_DEFI = None
+DEFAULT_COUNTER_VALUES = None
+DEFAULT_FICHIER_PIECES = "data/pieces.json"
+
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -27,15 +31,19 @@ class Application(tk.Tk):
         # Afficher le menu principal
         self.changer_interface(MenuPrincipal)
 
-    def changer_interface(self, nouvelle_interface, resize=False, num_defi=None, counter_values=None):
+    def changer_interface(self, nouvelle_interface, resize=True, 
+                          num_defi=DEFAULT_NUM_DEFI, 
+                          counter_values=DEFAULT_COUNTER_VALUES, 
+                          fichier_pieces=DEFAULT_FICHIER_PIECES):
+        
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
         
         # Charger la nouvelle interface avec les paramètres optionnels
-        if num_defi is not None and counter_values is not None:
+        if num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
             self.interface = nouvelle_interface(self, num_defi, counter_values)
-        elif num_defi is not None:
+        elif num_defi != DEFAULT_NUM_DEFI:
             self.interface = nouvelle_interface(self, num_defi, None)
         else:
             self.interface = nouvelle_interface(self)

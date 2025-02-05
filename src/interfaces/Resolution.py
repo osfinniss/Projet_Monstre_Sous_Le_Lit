@@ -21,7 +21,9 @@ class Resolution(tk.Frame):
 
     plateau_path="data/plateau1.json"
 
-    def __init__(self, controller, num_defi, counter_values):
+    pieces_path="data/pieces.json"
+
+    def __init__(self, controller, num_defi, counter_values, fichier_pieces=pieces_path):
         super().__init__(controller)
         self.controller = controller
         self.num_defi = num_defi
@@ -29,9 +31,9 @@ class Resolution(tk.Frame):
         self.config(bg="#004A9A")
 
         if num_defi < 0:
-            self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values))
+            self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values), fichier_pieces)
         else:
-            self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json")
+            self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json", fichier_pieces)
 
 
 
