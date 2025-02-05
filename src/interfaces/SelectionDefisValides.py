@@ -80,4 +80,4 @@ class SelectionDefisValides(tk.Frame):
 
     def go_to_resolution_defi(self, num_defi):
         """Méthode pour aller à la page de résolution d'un défi"""
-        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, counter_values=[])
+        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, counter_values=[], defi_generated=True)

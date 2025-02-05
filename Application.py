@@ -26,13 +26,15 @@ class Application(tk.Tk):
         # Afficher le menu principal
         self.changer_interface(MenuPrincipal)
 
-    def changer_interface(self, nouvelle_interface, resize=False, num_defi=None, counter_values=None):
+    def changer_interface(self, nouvelle_interface, resize=False, num_defi=None, counter_values=None, defi_generated=None):
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
         
         # Charger la nouvelle interface avec les paramètres optionnels
-        if num_defi is not None and counter_values is not None:
+        if defi_generated is not None:
+            self.interface = nouvelle_interface(self, num_defi, None, defi_generated)
+        elif num_defi is not None and counter_values is not None:
             self.interface = nouvelle_interface(self, num_defi, counter_values)
         elif num_defi is not None:
             self.interface = nouvelle_interface(self, num_defi, None)

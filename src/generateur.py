@@ -10,7 +10,7 @@ def generer_defis(nb_defis=3):
     defis_valides = []
     
     while len(defis_valides) < nb_defis:
-        nb_monstres = random.randint(2, 8)
+        nb_monstres = random.randint(2, 7)
         defi = {"monstres": random.choices(range(8), k=nb_monstres)}
         
         resultat = resoudre_defi(defi)
