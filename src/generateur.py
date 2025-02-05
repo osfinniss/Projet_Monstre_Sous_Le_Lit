@@ -2,34 +2,30 @@ import json
 import random
 import pandas as pd
 import os
-from solveur import resoudre_defi  # Import du solveur
+from solveur import resoudre_defi 
 
-# Liste des monstres (indices de 0 à 7)
 monstres = ["bat", "champi", "chien", "diable", "dino", "slime", "troll", "yeti"]
 
-# Fonction pour générer des défis valides
-def generer_defis(nb_defis=30):
+def generer_defis(nb_defis=3):
     defis_valides = []
     
     while len(defis_valides) < nb_defis:
-        # Générer un défi aléatoire
-        defi = {"monstres": random.choices(range(8), k=4)}
+        nb_monstres = random.randint(2, 8)
+        defi = {"monstres": random.choices(range(8), k=nb_monstres)}
         
-        # Vérifier si le solveur peut le résoudre
-        solution = resoudre_defi(defi)
+        resultat = resoudre_defi(defi)
+
+        is_resolvable = all(value != [] for value in resultat.values())
         
-        if solution:  # Si le solveur trouve une solution
+        if is_resolvable and defi not in defis_valides:
             defis_valides.append(defi)
 
     return defis_valides
 
-# Générer des défis résolubles
-defis_valides = generer_defis(30)
+defis_valides = generer_defis(3)
 
-# Vérifier si le dossier data existe, sinon le créer
 os.makedirs("data", exist_ok=True)
 
-# Sauvegarde dans un fichier JSON
 fichier_sortie = "data/defis_valides.json"
 with open(fichier_sortie, "w") as f:
     json.dump(defis_valides, f, indent=4)
