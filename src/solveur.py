@@ -40,8 +40,8 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
         raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
 
     
-    for i in range(len(defi)):
-        print("defi[",i,"] vaut ", defi[i])
+    # for i in range(len(defi)):
+    #     print("defi[",i,"] vaut ", defi[i])
     
     #On représente la grille par 4 sous-grilles avec 9 cases
     #Chaque entier représentera un monstre, -1 représentera une case vide
@@ -142,7 +142,7 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
             for j in range(len(pieces)):
                 # print("x[",i,"][",j,"]=",x[i][j].value)
                 if x[i][j].value==1:
-                    print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
+                    # print(f"Sous-grille ",i+1,": Pièce utilisée -> ",j+1,", Rotation utilisée -> ",r[j].value,"°")
                     pieces_rotation[i+1] = [j+1, r[j].value]
     else:
         print("Pas de solution trouvée.")

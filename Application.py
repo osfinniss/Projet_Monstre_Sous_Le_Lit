@@ -1,12 +1,16 @@
 import tkinter as tk
 from src.interfaces.MenuPrincipal import MenuPrincipal
+from src.interfaces.SelectionDefis import SelectionDefis
+from src.interfaces.SelectionDefisValides import SelectionDefisValides
 from src.interfaces.Resolution import Resolution
+from src.interfaces.CreationDefis import CreationDefis
 from src.interfaces.CreationPieces import CreationPieces
+from src.interfaces.OptionsGeneration import OptionsGeneration
 
 DEFAULT_NUM_DEFI = None
 DEFAULT_COUNTER_VALUES = None
 DEFAULT_FICHIER_PIECES = "data/pieces.json"
-DEFAULT_DEFI_GENERATED = None
+DEFAULT_DEFI_GENERATED = False
 
 class Application(tk.Tk):
     def __init__(self):
@@ -32,7 +36,8 @@ class Application(tk.Tk):
         # Afficher le menu principal
         self.changer_interface(MenuPrincipal)
 
-    def changer_interface(self, nouvelle_interface, resize=True, 
+    def changer_interface(self, nouvelle_interface, 
+                          resize=True, 
                           num_defi=DEFAULT_NUM_DEFI, 
                           counter_values=DEFAULT_COUNTER_VALUES, 
                           fichier_pieces=DEFAULT_FICHIER_PIECES,
@@ -41,22 +46,19 @@ class Application(tk.Tk):
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
-        
-        # Charger la nouvelle interface avec les paramètres optionnels
-        if defi_generated != DEFAULT_DEFI_GENERATED and defi_generated == True:
-            self.interface = nouvelle_interface(self, num_defi, None, fichier_pieces, defi_generated)
-        elif num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
-            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces)
-        elif num_defi != DEFAULT_NUM_DEFI:
-            self.interface = nouvelle_interface(self, num_defi, None, DEFAULT_FICHIER_PIECES)
-        else:
-            self.interface = nouvelle_interface(self)
 
-        # Vérifie si c'est l'interface "Resolution" et applique grid(), sinon pack()
-        if isinstance(self.interface, Resolution) or isinstance(self.interface, CreationPieces):
+        
+        if nouvelle_interface in (CreationPieces, OptionsGeneration):
+            self.interface = nouvelle_interface(self, counter_values)
+            self.interface.grid(row=0, column=0, sticky="nsew")
+
+        elif nouvelle_interface == Resolution :
+            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces, defi_generated)
             self.interface.grid(row=0, column=0, sticky="nsew")
         else:
+            self.interface = nouvelle_interface(self)
             self.interface.pack(expand=True, fill="both")
+
 
 
 

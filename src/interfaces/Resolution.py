@@ -23,7 +23,7 @@ class Resolution(tk.Frame):
 
     pieces_path="data/pieces.json"
 
-    def __init__(self, controller, num_defi, counter_values, fichier_pieces=pieces_path, defi_generated=False):
+    def __init__(self, controller, num_defi, counter_values, fichier_pieces, defi_generated):
         super().__init__(controller)
         self.controller = controller
         self.num_defi = num_defi

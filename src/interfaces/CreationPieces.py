@@ -3,10 +3,9 @@ from tkinter import ttk, messagebox
 
 class CreationPieces(tk.Frame):
 
-    def __init__(self, controller, num_defi, counter_values):
+    def __init__(self, controller, counter_values):
         super().__init__(controller)
         self.controller = controller
-        self.num_defi = num_defi
         self.counter_values = counter_values
         self.config(bg="#004A9A")
 

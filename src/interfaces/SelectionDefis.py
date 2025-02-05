@@ -68,18 +68,17 @@ class SelectionDefis(tk.Frame):
         btn_retour = tk.Button(self, text="Retour", font=("Arial", 14, "bold"), bg="darkred", fg="white", command=self.retour_menu_principal)
         btn_retour.pack(pady=10)
 
+
+
     def retour_menu_principal(self):
-        """Méthode pour revenir au menu principal"""
-        from src.interfaces.MenuPrincipal import MenuPrincipal  # Import différé pour éviter la boucle
+        from src.interfaces.MenuPrincipal import MenuPrincipal
         self.controller.changer_interface(MenuPrincipal, resize=True)
 
     def go_to_creation_defi(self):
-        """Méthode pour aller au menu de création de défi"""
-        from src.interfaces.CreationDefis import CreationDefis  # Import différé pour éviter la boucle
+        from src.interfaces.CreationDefis import CreationDefis
         self.controller.changer_interface(CreationDefis, resize=True)
 
     def go_to_resolution_defi(self, num_defi):
-        """Méthode pour aller au menu de création de défi"""
-        from src.interfaces.Resolution import Resolution  # Import différé pour éviter la boucle
-        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, defi_generated=None)
+        from src.interfaces.Resolution import Resolution
+        self.controller.changer_interface(Resolution, num_defi=num_defi)
 
