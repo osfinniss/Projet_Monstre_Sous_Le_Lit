@@ -1,6 +1,7 @@
 import tkinter as tk
 import json
 from PIL import Image, ImageTk
+from src.interfaces.Resolution import Resolution
 
 class SelectionDefisValides(tk.Frame):
     images_path = [
@@ -37,7 +38,7 @@ class SelectionDefisValides(tk.Frame):
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        # Charger les défis
+        # Charger les défis validés
         try:
             with open("data/defis_valides.json", "r") as f:
                 challenges_monsters = json.load(f)
@@ -63,6 +64,13 @@ class SelectionDefisValides(tk.Frame):
                 monster_image_label.image = monster_image
                 monster_image_label.pack(side="left", padx=5)
             
+            # Ajouter un bouton cliquable pour chaque défi
+            btn_overlay = tk.Button(
+                frame, text="", bg="#003366", activebackground="#002244", bd=0, highlightthickness=0,
+                command=lambda num_defi=i+1: self.go_to_resolution_defi(num_defi)
+            )
+            btn_overlay.pack(fill="both", expand=True, padx=5, pady=5)
+
         btn_retour = tk.Button(self, text="Retour", font=("Arial", 14, "bold"), bg="darkred", fg="white", command=self.retour_menu_principal)
         btn_retour.pack(pady=10)
 
@@ -70,3 +78,6 @@ class SelectionDefisValides(tk.Frame):
         from src.interfaces.MenuPrincipal import MenuPrincipal
         self.controller.changer_interface(MenuPrincipal, resize=True)
 
+    def go_to_resolution_defi(self, num_defi):
+        """Méthode pour aller à la page de résolution d'un défi"""
+        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, counter_values=[])
