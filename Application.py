@@ -26,7 +26,7 @@ class Application(tk.Tk):
 
         # Définition de la taille initiale (moitié de l'écran)
         self.window_width = self.screen_width // 2
-        self.window_height = self.screen_height // 2
+        self.window_height = (self.screen_height // 5) * 4
 
         # Positionnement au centre
         self.x_position = (self.screen_width - self.window_width) // 2
@@ -47,9 +47,6 @@ class Application(tk.Tk):
         for widget in self.winfo_children():
             widget.destroy()
 
-        # self.interface.destroy()
-
-        
         if nouvelle_interface in (CreationPieces, OptionsGeneration):
             self.interface = nouvelle_interface(self, counter_values)
             self.interface.grid(row=0, column=0, sticky="nsew")
@@ -60,8 +57,6 @@ class Application(tk.Tk):
         else:
             self.interface = nouvelle_interface(self)
             self.interface.pack(expand=True, fill="both")
-
-
 
 
 if __name__ == "__main__":

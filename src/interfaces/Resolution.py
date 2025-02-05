@@ -1,7 +1,7 @@
 import tkinter as tk
 import json
 from PIL import Image, ImageTk
-from src.solveur import resoudre_defi
+from src.solveur import resoudre_defi, rotation
 
 
 class Resolution(tk.Frame):
@@ -29,7 +29,17 @@ class Resolution(tk.Frame):
         self.num_defi = num_defi
         self.counter_values = counter_values
         self.is_generated = defi_generated
+        self.fichier_pieces = fichier_pieces
         self.config(bg="#004A9A")
+
+        if isinstance(fichier_pieces, str):  # Si on passe un chemin de fichier
+            with open(fichier_pieces, "r") as f:
+                self.pieces = json.load(f)["pieces"]
+        elif isinstance(fichier_pieces, dict):  # Si on passe un objet JSON déjà chargé
+            self.pieces = fichier_pieces["pieces"]
+        else:
+            raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
+
 
         if self.is_generated:
             with open("data/defis_valides.json", "r") as f:
@@ -111,69 +121,47 @@ class Resolution(tk.Frame):
         """Crée une grille 3x3 pour afficher les images."""
         cell_width = 100
         cell_height = 100
-        grid_width = cell_width * 3
-        grid_height = cell_height * 3
 
         try:
             grille_data = self.plateau[index]["cases"]
         except IndexError:
             grille_data = [[-1] * 3 for _ in range(3)]  # Grille vide si erreur
 
-        # Obtenir les informations de pièce et de rotation pour cette grille
-        piece_info = self.rotation_pieces.get(index + 1, [])  # index+1 pour correspondre à la grille 1,2,3,4
-        
-        # Charger et préparer l'image overlay si piece_info existe
-        if piece_info:
-            piece_num, rotation_angle = piece_info
-            # Charger l'image de la pièce
-            overlay_path = f"data/images/pieces/piece{piece_num}.png"
-            overlay_image = Image.open(overlay_path)
-            # Redimensionner avant la rotation
-            overlay_image = overlay_image.resize((grid_width, grid_height), Image.LANCZOS)
-            # Appliquer la rotation
-            overlay_image = overlay_image.rotate(-rotation_angle, expand=False, )
+        is_resolvable = all(value != [] for value in self.rotation_pieces.values())
 
-            is_resolvable = all(value != [] for value in self.rotation_pieces.values())
-        
+        if is_resolvable:
+            # Obtenir les informations de pièce et de rotation pour cette grille
+            piece_info = self.rotation_pieces.get(index + 1, [])  # index+1 pour correspondre à la grille 1,2,3,4
+
+            piece_num, rotation_angle = piece_info
+
+            piece_tournee = rotation(self.pieces[piece_num-1], rotation_angle)
             for row in range(3):
                 for col in range(3):
-                    # Obtenir l'image de base de la cellule
-                    value = grille_data[row][col]
-                    image_path = ""
-                    if value >= 0:
-                        image_path = self.images_path[value]
+                    cell_index = row * 3 + col
+
+                    if cell_index in piece_tournee:  # Si la cellule est couverte par la pièce
+                        grey_image = Image.open("data/images/grey.png")
+                        grey_image = grey_image.resize((cell_width, cell_height), Image.LANCZOS)
+                        grey_photo = ImageTk.PhotoImage(grey_image)  # Convertir l'image en PhotoImage
+                        cell = tk.Label(parent, image=grey_photo, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                        cell.image = grey_photo  # Assigner l'image à la variable image du Label
+                        cell.grid(row=row, column=col)   
                     else:
-                        image_path = self.blank_image_path
-                    base_image = Image.open(image_path)
-                    base_image = base_image.resize((cell_width, cell_height), Image.LANCZOS)
+                        # Obtenir l'image de base de la cellule
+                        value = grille_data[row][col]
+                        image_path = ""
+                        if value >= 0:
+                            image_path = self.images_path[value]
+                        else:
+                            image_path = self.blank_image_path
+                        base_image = Image.open(image_path)
+                        base_image = base_image.resize((cell_width, cell_height), Image.LANCZOS)
+                        base_photo = ImageTk.PhotoImage(base_image)  # Convertir l'image en PhotoImage
 
-                    if is_resolvable:
-                        # Découper la portion correspondante de l'overlay
-                        left = col * cell_width
-                        top = row * cell_height
-                        right = left + cell_width
-                        bottom = top + cell_height
-                        overlay_piece = overlay_image.crop((left, top, right, bottom))
-
-                        # S'assurer que les deux images sont en RGBA
-                        if base_image.mode != 'RGBA':
-                            base_image = base_image.convert('RGBA')
-                        if overlay_piece.mode != 'RGBA':
-                            overlay_piece = overlay_piece.convert('RGBA')
-
-                        # Combiner les images
-                        combined = Image.alpha_composite(base_image, overlay_piece)
-
-                        # Afficher l'image combinée
-                        photo = ImageTk.PhotoImage(combined)
-                        cell = tk.Label(parent, image=photo, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                        cell.image = photo
+                        cell = tk.Label(parent, image=base_photo, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                        cell.image = base_photo  # Assigner l'image à la variable image du Label
                         cell.grid(row=row, column=col)
-                    else:
-                        cell = tk.Label(parent, image=base_image, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                        cell.image = photo
-                        cell.grid(row=row, column=col)
-                        
         else:
             # Si pas de pièce à superposer, afficher la grille normale
             for row in range(3):
@@ -186,10 +174,13 @@ class Resolution(tk.Frame):
                         image_path = self.blank_image_path
                     image = Image.open(image_path)
                     image = image.resize((cell_width, cell_height), Image.LANCZOS)
-                    photo = ImageTk.PhotoImage(image)
+                    photo = ImageTk.PhotoImage(image)  # Convertir l'image en PhotoImage
+
+                    # Cellules sans pièces sont simplement l'image du monstre
                     cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                    cell.image = photo
-                    cell.grid(row=row, column=col)    
+                    cell.image = photo  # Assigner l'image à la variable image du Label
+                    cell.grid(row=row, column=col)
+
     
     def retour_menu_defis(self):
         if self.is_generated:
