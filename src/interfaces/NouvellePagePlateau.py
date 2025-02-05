@@ -27,7 +27,9 @@ class NouvellePagePlateau(tk.Frame):
 
     def new_resolution(self):
         from src.interfaces.NewResolution import NewResolution
-        resolution = NewResolution("data/new_defi.json", "data/pieces_nouvelles.json")
+        # resolution = NewResolution("data/new_defi.json", "data/pieces_nouvelles.json")
+        resolution = NewResolution("data/new_defi.json", "data/pieces_nouvelles.json", self.controller)
+
         resolution.resoudre()
 
         
