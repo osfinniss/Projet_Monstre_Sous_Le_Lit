@@ -69,3 +69,4 @@ class SelectionDefisValides(tk.Frame):
     def retour_menu_principal(self):
         from src.interfaces.MenuPrincipal import MenuPrincipal
         self.controller.changer_interface(MenuPrincipal, resize=True)
+
