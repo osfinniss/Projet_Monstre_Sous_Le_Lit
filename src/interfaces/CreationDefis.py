@@ -171,5 +171,5 @@ class CreationDefis(tk.Frame):
 
     def valider_defi_avec_generations(self):
         """Valide le défi créé"""
-        from src.interfaces.OptionsGeneration import OptionsGenerations
-        self.controller.changer_interface(OptionsGenerations, num_defi=-1, counter_values=self.counter_values)
+        from src.interfaces.CreationPieces import CreationPieces
+        self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)
