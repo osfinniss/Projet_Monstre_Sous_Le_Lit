@@ -46,9 +46,9 @@ class Application(tk.Tk):
         if defi_generated != DEFAULT_DEFI_GENERATED and defi_generated == True:
             self.interface = nouvelle_interface(self, num_defi, None, defi_generated)
         elif num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
-            self.interface = nouvelle_interface(self, num_defi, counter_values, None)
+            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces=DEFAULT_FICHIER_PIECES)
         elif num_defi != DEFAULT_NUM_DEFI:
-            self.interface = nouvelle_interface(self, num_defi, None, None)
+            self.interface = nouvelle_interface(self, num_defi, None, DEFAULT_FICHIER_PIECES)
         else:
             self.interface = nouvelle_interface(self)
 
