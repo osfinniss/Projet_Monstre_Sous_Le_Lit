@@ -25,6 +25,9 @@ def rotation(piece_originale,rotation):
     return piece_tournee
 
 def resoudre_defi(fichier_defis):
+
+    clear()
+
     with open(fichier_defis, "r") as f:
         defi = json.load(f)["monstres"]
     
@@ -68,6 +71,11 @@ def resoudre_defi(fichier_defis):
     #     [0, 2, 3, 4, 5, 6, 8]
     # ]
 
+    # Pré-calcul des rotations des pièces
+    rotations_pieces = {
+        (j, k): rotation(pieces[j], k) for j in range(len(pieces)) for k in [0, 90, 180, 270]
+    }
+
     # Nombre de cases visibles
     nb_cases_visibles = sum(len(grille[i]) for i in range(len(grille))) - sum(len(pieces[i]) for i in range(len(pieces)))
 
@@ -80,11 +88,11 @@ def resoudre_defi(fichier_defis):
 
     # Contrainte : chaque pièce doit être placée exactement une fois
     for j in range(len(pieces)):
-        satisfy(Sum([x[i][j] for i in range(len(grille))]) == 1)
+        satisfy(ExactlyOne([x[i][j] for i in range(len(grille))]))
 
     # Contrainte : chaque grille doit avoir exactement une pièce
     for i in range(len(grille)):
-        satisfy(Sum([x[i][j] for j in range(len(pieces))]) == 1)
+        satisfy(ExactlyOne([x[i][j] for j in range(len(pieces))]))
 
     # Contrainte : cases_visibles doit contenir chaque monstre autant de fois qu'il est présent dans defi
     satisfy(Count(cases_visibles,value = monstre) == defi.count(monstre) for monstre in range(8))
@@ -104,8 +112,8 @@ def resoudre_defi(fichier_defis):
     cases_visibles_index = 0
     for i in range(len(grille)):
         for j in range(len(pieces)):
-            for k in {0,90,180,270}:
-                piece_tournee=rotation(pieces[j],k)
+            for k in [0,90,180,270]:
+                piece_tournee = rotations_pieces[(j, k)]
                 indices_cases_visibles = [l for l in range(len(grille[i])) if piece_tournee.count(l)==0]
                 for l in range(len(indices_cases_visibles)):
                     satisfy(If(both(x[i][j]==1,r[j]==k),Then = cases_visibles[cases_visibles_index] == grille[i][indices_cases_visibles[l]]))
@@ -113,9 +121,9 @@ def resoudre_defi(fichier_defis):
                 cases_visibles_index-=len(indices_cases_visibles)
         #On suppose que toutes les pièces couvrent le même nombre de cases
         cases_visibles_index+=(len(grille[i])-len(pieces[0]))
-
+        
     # Résolution
-    if solve():
+    if solve(sols=1):
         # Affichage des résultats
         for i in range(len(grille)):
             for j in range(len(pieces)):

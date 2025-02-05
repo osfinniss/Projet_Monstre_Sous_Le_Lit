@@ -5,38 +5,46 @@
     <array id="r" size="[4]"> 0 90 180 270 </array>
   </variables>
   <constraints>
-    <sum>
+    <count>
       <list> x[][0] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[][1] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[][2] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[][3] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[0][] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[1][] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[2][] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
-    <sum>
+    </count>
+    <count>
       <list> x[3][] </list>
+      <values> 1 </values>
       <condition> (eq,1) </condition>
-    </sum>
+    </count>
     <group>
       <count>
         <list> cases_visibles[] </list>
