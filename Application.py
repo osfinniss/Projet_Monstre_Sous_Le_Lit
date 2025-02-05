@@ -44,9 +44,9 @@ class Application(tk.Tk):
         
         # Charger la nouvelle interface avec les paramètres optionnels
         if defi_generated != DEFAULT_DEFI_GENERATED and defi_generated == True:
-            self.interface = nouvelle_interface(self, num_defi, None, defi_generated)
+            self.interface = nouvelle_interface(self, num_defi, None, fichier_pieces, defi_generated)
         elif num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
-            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces=DEFAULT_FICHIER_PIECES)
+            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces)
         elif num_defi != DEFAULT_NUM_DEFI:
             self.interface = nouvelle_interface(self, num_defi, None, DEFAULT_FICHIER_PIECES)
         else:
