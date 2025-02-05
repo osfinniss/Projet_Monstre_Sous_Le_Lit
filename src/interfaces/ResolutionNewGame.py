@@ -1,5 +1,6 @@
 import tkinter as tk
 import json
+import os
 from PIL import Image, ImageTk
 from src.solveur import resoudre_defi
 from src.interfaces.CreationDefis import CreationDefis
@@ -19,15 +20,20 @@ class ResolutionNewGame(tk.Frame):
     blank_image_path = "data/images/blank.png"
     plateau_path = "data/plateau_nouveau.json"
     pieces_path = "data/pieces_nouvelles.json"
+    defi_path = "data/new_defi.json"
 
-    def __init__(self, controller, counter_values, fichier_pieces=pieces_path):
+    def __init__(self, controller, fichier_pieces=pieces_path):
         super().__init__(controller)
         self.controller = controller
-        self.counter_values = counter_values
         self.config(bg="#004A9A")
-        
-        # Convertir les monstres en format compatible avec le solveur
-        defi_monstres = convertir_monstres(counter_values)
+
+        # Charger le défi depuis new_defi.json
+        defi_monstres = self.charger_defi()
+
+        # Vérifier si le défi est valide
+        if not defi_monstres:
+            print("Erreur : Impossible de charger le défi depuis new_defi.json.")
+            return
         
         # Lancer la résolution
         self.rotation_pieces = resoudre_defi(defi_monstres, fichier_pieces)
@@ -35,7 +41,7 @@ class ResolutionNewGame(tk.Frame):
         # Vérifier si une solution a été trouvée
         is_resolvable = all(value != [] for value in self.rotation_pieces.values())
         print("Solution trouvée!" if is_resolvable else "Aucune solution trouvée.")
-        
+
         # Charger le plateau depuis le fichier JSON
         self.plateau = self.load_plateau(self.plateau_path)
         
@@ -80,16 +86,32 @@ class ResolutionNewGame(tk.Frame):
         )
         self.btn_retour.grid(row=2, column=0, columnspan=2, pady=10)
 
-    def load_plateau(self, json_path):
+    def charger_defi(self):
+        """Charge le défi depuis new_defi.json et retourne la liste des monstres"""
+        if not os.path.exists(self.defi_path):
+            print(f"Erreur : Le fichier {self.defi_path} n'existe pas.")
+            return None
+        
         try:
-            with open(json_path, "r") as file:
+            with open(self.defi_path, "r", encoding="utf-8") as fichier:
+                data = json.load(fichier)
+                return data  # Retourne directement le dictionnaire {"monstres": [..]}
+        except json.JSONDecodeError:
+            print("Erreur : Le fichier new_defi.json est corrompu ou mal formaté.")
+            return None
+
+    def load_plateau(self, json_path):
+        """Charge le plateau depuis un fichier JSON"""
+        try:
+            with open(json_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
-            return data["plateau"]
+            return data.get("plateau", [])
         except Exception as e:
             print(f"Erreur lors du chargement du fichier JSON : {e}")
             return []
 
     def create_grid(self, parent, index):
+        """Crée la grille d'affichage"""
         cell_width, cell_height = 100, 100
         
         try:
@@ -109,9 +131,6 @@ class ResolutionNewGame(tk.Frame):
                 cell.grid(row=row, column=col)
     
     def retour_menu_defis(self):
+        """Retourne à la sélection des défis"""
         from src.interfaces.SelectionDefis import SelectionDefis
         self.controller.changer_interface(SelectionDefis)
-
-
-def convertir_monstres(counter_values):
-    return {"monstres": [index for index, count in enumerate(counter_values) for _ in range(count)]}

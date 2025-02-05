@@ -21,17 +21,19 @@ class NouvellePagePlateau(tk.Frame):
                                          font=("Arial", 14, "bold"), bg="cyan", fg="black", relief="raised", bd=5, padx=20, pady=10)
         self.btn_nouveau_jeu.pack(pady=10)
 
-        self.btn_resoudre_nouveau_jeu = tk.Button(button_frame, text="Résoudre un nouveau jeu", command=self.resoudre_nouveau_jeu,
+        self.btn_resoudre_nouveau_jeu = tk.Button(button_frame, text="Résoudre un nouveau jeu", command=self.new_resolution,
                                          font=("Arial", 14, "bold"), bg="cyan", fg="black", relief="raised", bd=5, padx=20, pady=10)
         self.btn_resoudre_nouveau_jeu.pack(pady=10)
 
+    def new_resolution(self):
+        from src.interfaces.NewResolution import NewResolution
+        resolution = NewResolution("data/new_defi.json", "data/pieces_nouvelles.json")
+        resolution.resoudre()
+
+        
     def afficher_plateau(self):
         from src.interfaces.AffichagePlateau import AffichagePlateau
         self.controller.changer_interface(AffichagePlateau)
-
-    def resoudre_nouveau_jeu(self):
-        from src.interfaces.ResolutionNewGame import ResolutionNewGame
-        self.controller.changer_interface(ResolutionNewGame, counter_values=self.controller.counter_values, resize=True, num_defi=1, defi_generated=None)
 
     def generer_plateau_aleatoire(self):
         return {
@@ -51,3 +53,4 @@ class NouvellePagePlateau(tk.Frame):
             json.dump(pieces_data, f, indent=4)
         
         messagebox.showinfo("Nouveau Jeu", "Un nouveau jeu a été généré avec succès!")
+
