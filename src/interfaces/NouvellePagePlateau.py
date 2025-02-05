@@ -31,7 +31,7 @@ class NouvellePagePlateau(tk.Frame):
 
     def resoudre_nouveau_jeu(self):
         from src.interfaces.ResolutionNewGame import ResolutionNewGame
-        self.controller.changer_interface(ResolutionNewGame, resize=True, num_defi=1, defi_generated=None)
+        self.controller.changer_interface(ResolutionNewGame, counter_values=self.controller.counter_values, resize=True, num_defi=1, defi_generated=None)
 
     def generer_plateau_aleatoire(self):
         return {

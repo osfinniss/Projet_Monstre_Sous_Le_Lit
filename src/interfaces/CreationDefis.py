@@ -1,5 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import json
+import os
 
 class CreationDefis(tk.Frame):
 
@@ -166,11 +168,32 @@ class CreationDefis(tk.Frame):
 
     def valider_defi(self):
         """Valide le défi créé"""
+        self.sauvegarder_defi()  # Sauvegarde dans le JSON
         from src.interfaces.Resolution import Resolution
         self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values, defi_generated=False)
 
     def valider_defi_avec_generations(self):
         """Valide le défi créé"""
+        self.sauvegarder_defi()  # Sauvegarde dans le JSON
         from src.interfaces.OptionsGeneration import OptionsGeneration
         self.controller.changer_interface(OptionsGeneration, counter_values=self.counter_values)
         # self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)
+
+
+
+    def sauvegarder_defi(self):
+        """Écrase l'ancien fichier et sauvegarde uniquement le nouveau défi dans 'new_defi.json'."""
+        fichier_defis = "data/new_defi.json"
+
+        # Générer la liste des monstres avec répétition
+        monstres_selectionnes = {
+            "monstres": [
+                i for i in range(len(self.counter_values)) for _ in range(self.counter_values[i])
+            ]
+        }
+
+        # Écrire un nouveau fichier (supprime l'ancien automatiquement)
+        with open(fichier_defis, "w", encoding="utf-8") as fichier:
+            json.dump(monstres_selectionnes, fichier, indent=4, ensure_ascii=False)
+        
+        print("Nouveau défi sauvegardé, l'ancien fichier a été remplacé !")
