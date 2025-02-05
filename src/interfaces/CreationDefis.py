@@ -60,7 +60,7 @@ class CreationDefis(tk.Frame):
                                 command=self.valider_defi, width=20)
         btn_valider.pack(side="right", padx=5, pady=20)
 
-        # Bouton Valider
+        # Bouton Valider avec génération
         btn_valider_avec_generation = tk.Button(main_frame, text="Valider (nouveau plateau et pièces)", font=("Arial", 14, "bold"), bg="blue", fg="white",
                                 command=self.valider_defi_avec_generations, width=50)
         btn_valider_avec_generation.pack(side="bottom", padx=5, pady=5)
@@ -167,7 +167,7 @@ class CreationDefis(tk.Frame):
     def valider_defi(self):
         """Valide le défi créé"""
         from src.interfaces.Resolution import Resolution
-        self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values)
+        self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values, defi_generated=False)
 
     def valider_defi_avec_generations(self):
         """Valide le défi créé"""

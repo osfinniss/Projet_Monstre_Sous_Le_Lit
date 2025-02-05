@@ -6,6 +6,7 @@ from src.interfaces.CreationPieces import CreationPieces
 DEFAULT_NUM_DEFI = None
 DEFAULT_COUNTER_VALUES = None
 DEFAULT_FICHIER_PIECES = "data/pieces.json"
+DEFAULT_DEFI_GENERATED = None
 
 class Application(tk.Tk):
     def __init__(self):
@@ -34,17 +35,20 @@ class Application(tk.Tk):
     def changer_interface(self, nouvelle_interface, resize=True, 
                           num_defi=DEFAULT_NUM_DEFI, 
                           counter_values=DEFAULT_COUNTER_VALUES, 
-                          fichier_pieces=DEFAULT_FICHIER_PIECES):
+                          fichier_pieces=DEFAULT_FICHIER_PIECES,
+                          defi_generated=DEFAULT_DEFI_GENERATED):
         
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
             widget.destroy()
         
         # Charger la nouvelle interface avec les paramètres optionnels
-        if num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
-            self.interface = nouvelle_interface(self, num_defi, counter_values)
+        if defi_generated != DEFAULT_DEFI_GENERATED and defi_generated == True:
+            self.interface = nouvelle_interface(self, num_defi, None, defi_generated)
+        elif num_defi != DEFAULT_NUM_DEFI and counter_values != DEFAULT_COUNTER_VALUES:
+            self.interface = nouvelle_interface(self, num_defi, counter_values, None)
         elif num_defi != DEFAULT_NUM_DEFI:
-            self.interface = nouvelle_interface(self, num_defi, None)
+            self.interface = nouvelle_interface(self, num_defi, None, None)
         else:
             self.interface = nouvelle_interface(self)
 

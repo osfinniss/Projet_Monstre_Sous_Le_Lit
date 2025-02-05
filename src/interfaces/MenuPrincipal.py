@@ -1,7 +1,6 @@
 import tkinter as tk
-import json
-import subprocess
-from PIL import Image, ImageTk
+from tkinter import messagebox
+from src.generateur_defis import GenerateurDefis
 
 class MenuPrincipal(tk.Frame):
     def __init__(self, controller):
@@ -28,7 +27,7 @@ class MenuPrincipal(tk.Frame):
         # Création des boutons
         self.btn_resoudre = tk.Button(button_frame, text="Résoudre un défi", command=self.go_to_defis,
                                       font=("Arial", 14, "bold"), bg="purple", fg="white", relief="raised", bd=5, padx=20, pady=10)
-        self.btn_generer = tk.Button(button_frame, text="Générer un défi", command=self.generer_defi,
+        self.btn_generer = tk.Button(button_frame, text="Générer un défi", command=self.choisir_parametres_generateur,
                                      font=("Arial", 14, "bold"), bg="purple", fg="white", relief="raised", bd=5, padx=20, pady=10)
         self.btn_quitter = tk.Button(button_frame, text="Quitter", command=controller.quit,
                                      font=("Arial", 14, "bold"), bg="red", fg="white", relief="raised", bd=5, padx=20, pady=10)
@@ -43,14 +42,6 @@ class MenuPrincipal(tk.Frame):
         from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle
         self.controller.changer_interface(SelectionDefis, resize=True)
     
-    def generer_defi(self):
-        """Lance generateur.py et affiche les nouveaux défis après son exécution."""
-        try:
-            subprocess.run(["python3", "src/generateur.py"], check=True)
-        except subprocess.CalledProcessError as e:
-            print("Erreur lors de l'exécution du générateur:", e)
-            return
-
-        # Après l'exécution du générateur, afficher la sélection des défis validés
-        from src.interfaces.SelectionDefisValides import SelectionDefisValides  # Nouvelle interface
-        self.controller.changer_interface(SelectionDefisValides, resize=True)
+    def choisir_parametres_generateur(self):
+        """Affiche l'interface de génération des défis."""
+        self.controller.changer_interface(GenerateurDefis)

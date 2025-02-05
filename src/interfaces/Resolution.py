@@ -23,14 +23,20 @@ class Resolution(tk.Frame):
 
     pieces_path="data/pieces.json"
 
-    def __init__(self, controller, num_defi, counter_values, fichier_pieces=pieces_path):
+    def __init__(self, controller, num_defi, counter_values, fichier_pieces=pieces_path, defi_generated):
         super().__init__(controller)
         self.controller = controller
         self.num_defi = num_defi
         self.counter_values = counter_values
+        self.is_generated = defi_generated
         self.config(bg="#004A9A")
 
-        if num_defi < 0:
+        if self.is_generated:
+            with open("data/defis_valides.json", "r") as f:
+                defi = json.load(f)[self.num_defi-1]
+            self.rotation_pieces = resoudre_defi(defi)
+
+        elif num_defi < 0:
             self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values), fichier_pieces)
         else:
             self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json", fichier_pieces)
@@ -186,9 +192,14 @@ class Resolution(tk.Frame):
                     cell.grid(row=row, column=col)    
     
     def retour_menu_defis(self):
-        """Retourne à l'interface de sélection de défis"""
-        from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle d'import
-        self.controller.changer_interface(SelectionDefis)
+        if self.is_generated:
+            """Retourne à l'interface de sélection de défis"""
+            from src.interfaces.SelectionDefisValides import SelectionDefisValides  # Import différé pour éviter la boucle d'import
+            self.controller.changer_interface(SelectionDefisValides)
+        else:
+            """Retourne à l'interface de sélection de défis"""
+            from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle d'import
+            self.controller.changer_interface(SelectionDefis)
 
 def convertir_monstres(counter_values):
     """Convertit counter_values en une liste de monstres sous forme d'occurrences"""
