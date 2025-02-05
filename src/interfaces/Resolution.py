@@ -40,7 +40,6 @@ class Resolution(tk.Frame):
         else:
             raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
 
-
         if self.is_generated:
             with open("data/defis_valides.json", "r") as f:
                 defi = json.load(f)[self.num_defi-1]
@@ -51,7 +50,8 @@ class Resolution(tk.Frame):
         else:
             self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json", fichier_pieces)
 
-
+        # Vérifier si toutes les sous-grilles ont une rotation
+        self.is_resolvable = all(value != [] for value in self.rotation_pieces.values())
 
         # Charger le plateau depuis le fichier JSON
         self.plateau = self.load_plateau(self.plateau_path)
@@ -59,7 +59,10 @@ class Resolution(tk.Frame):
         # Définir la largeur et la hauteur de la fenêtre
         cell_size = 100  # Taille d'une cellule
         grid_size = 3 * cell_size  # Une grille fait 3 colonnes x 100 px = 300 px
-        total_width = (2 * grid_size) + 60  # Ajustement : 60 px de marge
+        if self.is_resolvable:
+            total_width = 2 * ((2 * grid_size) + 60)  # Ajustement : 60 px de marge
+        else:
+            total_width = (2 * grid_size) + 60  # Ajustement : 60 px de marge
         total_height = (2 * grid_size) + 200  # Ajustement + place pour le label
 
         # Modifier la taille de la fenêtre et la centrer
@@ -73,28 +76,37 @@ class Resolution(tk.Frame):
         self.grid(row=0, column=0, sticky="nsew")
 
         # Créer un conteneur pour les grilles
+        if self.is_resolvable:
+            self.view_container = tk.Frame(self, bg="#004A9A")
+            self.view_container.grid(row=0, column=0, padx=10, pady=10)  # Placer à la première colonne
+
         self.grid_container = tk.Frame(self, bg="#004A9A")
-        self.grid_container.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        self.grid_container.grid(row=0, column=1, padx=10, pady=10)  # Placer à la deuxième colonne
 
         # Créer 4 frames pour les 4 grilles
         self.frames = [tk.Frame(self.grid_container, borderwidth=2, relief="solid", bg="#004A9A") for _ in range(4)]
 
+        if self.is_resolvable:
+            self.frames_view = [tk.Frame(self.view_container, borderwidth=2, relief="solid", bg="#004A9A") for _ in range(4)]
+
+            # Positionner les frames en grille 2x2
+            for i, frame in enumerate(self.frames_view):
+                frame.grid(row=i // 2, column=i % 2, padx=5, pady=5)
+                self.create_grid(frame, i, True)
+
         # Positionner les frames en grille 2x2
         for i, frame in enumerate(self.frames):
             frame.grid(row=i // 2, column=i % 2, padx=5, pady=5)
-            self.create_grid(frame, i)
-
-        # Vérifier si toutes les sous-grilles ont une rotation
-        is_resolvable = all(value != [] for value in self.rotation_pieces.values())
+            self.create_grid(frame, i, False)
 
         # Ajouter un Label "(NON) RESOLVABLE" en dessous de la grille
-        if is_resolvable:
+        if self.is_resolvable:
             self.label_resolvable = tk.Label(self, text="RESOLVABLE", font=("Arial", 30, "bold"), bg="#004A9A", fg="white")
         else:
             self.label_resolvable = tk.Label(self, text="NON RESOLVABLE", font=("Arial", 30, "bold"), bg="#004A9A", fg="red")
 
         self.label_resolvable.grid(row=1, column=0, columnspan=2, pady=10)
-        
+
         # Bouton retour
         self.btn_retour = tk.Button(self, text="Retour", font=("Arial", 14, "bold"), bg="darkred", fg="white",
                                     command=self.retour_menu_defis)
@@ -107,6 +119,7 @@ class Resolution(tk.Frame):
         self.rowconfigure(1, weight=0)
         self.rowconfigure(2, weight=0)
 
+
     def load_plateau(self, json_path):
         """Charge le fichier JSON du plateau."""
         try:
@@ -117,7 +130,7 @@ class Resolution(tk.Frame):
             print(f"Erreur lors du chargement du fichier JSON : {e}")
             return []
 
-    def create_grid(self, parent, index):
+    def create_grid(self, parent, index, is_preview):
         """Crée une grille 3x3 pour afficher les images."""
         cell_width = 100
         cell_height = 100
@@ -127,9 +140,7 @@ class Resolution(tk.Frame):
         except IndexError:
             grille_data = [[-1] * 3 for _ in range(3)]  # Grille vide si erreur
 
-        is_resolvable = all(value != [] for value in self.rotation_pieces.values())
-
-        if is_resolvable:
+        if self.is_resolvable and not is_preview:
             # Obtenir les informations de pièce et de rotation pour cette grille
             piece_info = self.rotation_pieces.get(index + 1, [])  # index+1 pour correspondre à la grille 1,2,3,4
 
