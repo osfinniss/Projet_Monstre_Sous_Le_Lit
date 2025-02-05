@@ -65,6 +65,7 @@ class GenerateurDefis(tk.Frame):
         from src.interfaces.SelectionDefisValides import SelectionDefisValides
         self.controller.changer_interface(SelectionDefisValides, resize=True)
 
+
     def retour_menu_principal(self):
         from src.interfaces.MenuPrincipal import MenuPrincipal
         self.controller.changer_interface(MenuPrincipal, resize=True)

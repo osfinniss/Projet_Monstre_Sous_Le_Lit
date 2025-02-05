@@ -22,7 +22,7 @@ class AffichagePlateau(tk.Frame):
         self.controller = controller
         self.config(bg="#004A9A")
         
-        self.plateau = self.load_plateau("data/plateau_aleatoire.json")
+        self.plateau = self.load_plateau("data/plateau_nouveau.json")
         
         self.grid_container = tk.Frame(self, bg="#004A9A")
         self.grid_container.pack()
