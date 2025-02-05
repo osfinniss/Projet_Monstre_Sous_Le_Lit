@@ -81,5 +81,5 @@ class SelectionDefis(tk.Frame):
     def go_to_resolution_defi(self, num_defi):
         """Méthode pour aller au menu de création de défi"""
         from src.interfaces.Resolution import Resolution  # Import différé pour éviter la boucle
-        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi)
+        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, defi_generated=None)
 

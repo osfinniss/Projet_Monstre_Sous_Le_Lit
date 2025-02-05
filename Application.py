@@ -32,12 +32,12 @@ class Application(tk.Tk):
             widget.destroy()
         
         # Charger la nouvelle interface avec les paramètres optionnels
-        if defi_generated is not None:
+        if defi_generated is not None and defi_generated == True:
             self.interface = nouvelle_interface(self, num_defi, None, defi_generated)
         elif num_defi is not None and counter_values is not None:
-            self.interface = nouvelle_interface(self, num_defi, counter_values)
+            self.interface = nouvelle_interface(self, num_defi, counter_values, None)
         elif num_defi is not None:
-            self.interface = nouvelle_interface(self, num_defi, None)
+            self.interface = nouvelle_interface(self, num_defi, None, None)
         else:
             self.interface = nouvelle_interface(self)
 
