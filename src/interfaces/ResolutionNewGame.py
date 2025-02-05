@@ -35,13 +35,16 @@ class ResolutionNewGame(tk.Frame):
             with open("data/defis/defi1.json", "r") as f:
                 defi = json.load(f)[self.num_defi-1]
             self.rotation_pieces = resoudre_defi(defi)
-
         elif num_defi < 0:
             self.rotation_pieces = resoudre_defi(convertir_monstres(counter_values), fichier_pieces)
         else:
             self.rotation_pieces = resoudre_defi(f"data/defis/defi{self.num_defi}.json", fichier_pieces)
 
-
+        # Vérifier si une solution a été trouvée et l'afficher dans le terminal
+        if all(value != [] for value in self.rotation_pieces.values()):
+            print("Solution trouvée!")
+        else:
+            print("Aucune solution trouvée.")
 
         # Charger le plateau depuis le fichier JSON
         self.plateau = self.load_plateau(self.plateau_path)
@@ -90,13 +93,6 @@ class ResolutionNewGame(tk.Frame):
                                     command=self.retour_menu_defis)
         self.btn_retour.grid(row=2, column=0, columnspan=2, pady=10)
 
-        # Forcer l'expansion des lignes/colonnes pour le bon positionnement
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=1)
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=0)
-        self.rowconfigure(2, weight=0)
-
     def load_plateau(self, json_path):
         """Charge le fichier JSON du plateau."""
         try:
@@ -111,99 +107,35 @@ class ResolutionNewGame(tk.Frame):
         """Crée une grille 3x3 pour afficher les images."""
         cell_width = 100
         cell_height = 100
-        grid_width = cell_width * 3
-        grid_height = cell_height * 3
 
         try:
             grille_data = self.plateau[index]["cases"]
         except IndexError:
             grille_data = [[-1] * 3 for _ in range(3)]  # Grille vide si erreur
 
-        # Obtenir les informations de pièce et de rotation pour cette grille
-        piece_info = self.rotation_pieces.get(index + 1, [])  # index+1 pour correspondre à la grille 1,2,3,4
-        
-        # Charger et préparer l'image overlay si piece_info existe
-        if piece_info:
-            piece_num, rotation_angle = piece_info
-            # Charger l'image de la pièce
-            overlay_path = f"data/images/pieces/piece{piece_num}.png"
-            overlay_image = Image.open(overlay_path)
-            # Redimensionner avant la rotation
-            overlay_image = overlay_image.resize((grid_width, grid_height), Image.LANCZOS)
-            # Appliquer la rotation
-            overlay_image = overlay_image.rotate(-rotation_angle, expand=False, )
+        for row in range(3):
+            for col in range(3):
+                value = grille_data[row][col]
+                image_path = self.images_path[value] if value >= 0 else self.blank_image_path
+                image = Image.open(image_path)
+                image = image.resize((cell_width, cell_height), Image.LANCZOS)
+                photo = ImageTk.PhotoImage(image)
 
-            is_resolvable = all(value != [] for value in self.rotation_pieces.values())
-        
-            for row in range(3):
-                for col in range(3):
-                    # Obtenir l'image de base de la cellule
-                    value = grille_data[row][col]
-                    image_path = ""
-                    if value >= 0:
-                        image_path = self.images_path[value]
-                    else:
-                        image_path = self.blank_image_path
-                    base_image = Image.open(image_path)
-                    base_image = base_image.resize((cell_width, cell_height), Image.LANCZOS)
+                cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
+                cell.image = photo
+                cell.grid(row=row, column=col)
 
-                    if is_resolvable:
-                        # Découper la portion correspondante de l'overlay
-                        left = col * cell_width
-                        top = row * cell_height
-                        right = left + cell_width
-                        bottom = top + cell_height
-                        overlay_piece = overlay_image.crop((left, top, right, bottom))
-
-                        # S'assurer que les deux images sont en RGBA
-                        if base_image.mode != 'RGBA':
-                            base_image = base_image.convert('RGBA')
-                        if overlay_piece.mode != 'RGBA':
-                            overlay_piece = overlay_piece.convert('RGBA')
-
-                        # Combiner les images
-                        combined = Image.alpha_composite(base_image, overlay_piece)
-
-                        # Afficher l'image combinée
-                        photo = ImageTk.PhotoImage(combined)
-                        cell = tk.Label(parent, image=photo, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                        cell.image = photo
-                        cell.grid(row=row, column=col)
-                    else:
-                        cell = tk.Label(parent, image=base_image, borderwidth=0, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                        cell.image = photo
-                        cell.grid(row=row, column=col)
-                        
-        else:
-            # Si pas de pièce à superposer, afficher la grille normale
-            for row in range(3):
-                for col in range(3):
-                    value = grille_data[row][col]
-                    image_path = ""
-                    if value >= 0:
-                        image_path = self.images_path[value]
-                    else:
-                        image_path = self.blank_image_path
-                    image = Image.open(image_path)
-                    image = image.resize((cell_width, cell_height), Image.LANCZOS)
-                    photo = ImageTk.PhotoImage(image)
-                    cell = tk.Label(parent, image=photo, borderwidth=1, relief="solid", width=cell_width, height=cell_height, background="#004A9A")
-                    cell.image = photo
-                    cell.grid(row=row, column=col)    
-    
     def retour_menu_defis(self):
         if self.is_generated:
-            """Retourne à l'interface de sélection de défis"""
-            from src.interfaces.SelectionDefisValides import SelectionDefisValides  # Import différé pour éviter la boucle d'import
+            from src.interfaces.SelectionDefisValides import SelectionDefisValides
             self.controller.changer_interface(SelectionDefisValides)
         else:
-            """Retourne à l'interface de sélection de défis"""
-            from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle d'import
+            from src.interfaces.SelectionDefis import SelectionDefis
             self.controller.changer_interface(SelectionDefis)
 
 def convertir_monstres(counter_values):
     """Convertit counter_values en une liste de monstres sous forme d'occurrences"""
     monstres = []
     for index, count in enumerate(counter_values):
-        monstres.extend([index] * count)  # Ajoute `count` fois le monstre `index+1`
+        monstres.extend([index] * count)
     return {"monstres": monstres}

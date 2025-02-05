@@ -33,7 +33,7 @@ class SelectionDefisValides(tk.Frame):
         )
 
         canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.configure(yscrollcommand=scrollbar.set, bg="#003366")
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
@@ -80,4 +80,4 @@ class SelectionDefisValides(tk.Frame):
 
     def go_to_resolution_defi(self, num_defi):
         """Méthode pour aller à la page de résolution d'un défi"""
-        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, counter_values=[], defi_generated=True)
+        self.controller.changer_interface(Resolution, resize=True, num_defi=num_defi, defi_generated=True)
