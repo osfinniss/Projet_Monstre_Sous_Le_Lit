@@ -168,7 +168,6 @@ class CreationDefis(tk.Frame):
 
     def valider_defi(self):
         """Valide le défi créé"""
-        self.sauvegarder_defi()  # Sauvegarde dans le JSON
         from src.interfaces.Resolution import Resolution
         self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values, defi_generated=False)
 
@@ -176,4 +175,3 @@ class CreationDefis(tk.Frame):
         """Valide le défi créé"""
         from src.interfaces.OptionsGeneration import OptionsGeneration
         self.controller.changer_interface(OptionsGeneration, counter_values=self.counter_values)
-        # self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)

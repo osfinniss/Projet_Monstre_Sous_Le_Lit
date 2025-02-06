@@ -5,6 +5,9 @@ from tkinter import messagebox
 from src.solveur import resoudre_defi
 
 class NewResolution:
+
+    fichier_plateau = "data/plateau1.json"
+
     def __init__(self, fichier_defi, fichier_pieces, controller):
         """
         Initialise la résolution d'un défi avec possibilité de regénérer un nouveau jeu si nécessaire.
@@ -54,30 +57,33 @@ class NewResolution:
         puis relance automatiquement la résolution.
         """
         plateau_data = self.generer_plateau_aleatoire()
+        self.fichier_plateau = "data/plateau_nouveau.json"
         with open("data/plateau_nouveau.json", "w") as f:
             json.dump(plateau_data, f, indent=4)
         
-        pieces_data = {"pieces": [sorted(random.sample(range(9), 6)) for _ in range(4)]}
+        self.pieces_data = {"pieces": [sorted(random.sample(range(9), 6)) for _ in range(4)]}
         with open("data/pieces_nouvelles.json", "w") as f:
-            json.dump(pieces_data, f, indent=4)
+            json.dump(self.pieces_data, f, indent=4)
 
         print("🔄 Nouveau jeu généré automatiquement.")
 
         # Afficher un message et cliquer automatiquement sur "OK" après 1 seconde
-        self.controller.after(1000, lambda: self.resoudre())
+        self.resoudre()
 
     def resoudre(self):
         """
         Tente de résoudre le défi en utilisant les pièces disponibles.
         Si la résolution échoue, génère un nouveau jeu et réessaie jusqu'à obtenir une solution valide.
         """
-        tentative = 1
+        self.tentative = 0
         while True:
-            print(f"🔄 Tentative de résolution {tentative} en cours...")
+            self.tentative = self.tentative + 1
+            print(f"🔄 Tentative de résolution {self.tentative} en cours...")
 
             # Charger les fichiers JSON
             defi_data = self.charger_json(self.fichier_defi)
             pieces_data = self.charger_json(self.fichier_pieces)
+            plateau_data = self.charger_json(self.fichier_plateau)
 
             if not defi_data or not pieces_data:
                 print("⚠️ Impossible de résoudre le défi en raison d'erreurs de chargement des fichiers.")
@@ -86,21 +92,20 @@ class NewResolution:
             # Extraire les monstres et les pièces
             monstres = defi_data.get("monstres", [])
             pieces = pieces_data.get("pieces", [])
+            plateau = plateau_data.get("plateau", [])
 
             if not monstres or not pieces:
                 print("⚠️ Erreur : Données de défi ou de pièces manquantes.")
                 return
 
             # Appel du solveur
-            resultat = resoudre_defi({"monstres": monstres}, {"pieces": pieces})
+            resultat = resoudre_defi({"monstres": monstres}, {"pieces": pieces}, {"plateau": plateau} )
 
             # Vérification du résultat
             if not resultat or any(not isinstance(val, list) or len(val) != 2 for val in resultat.values()):
-                print(f"❌ Aucun placement valide trouvé lors de la tentative {tentative}. Génération d'un nouveau jeu...")
+                print(f"❌ Aucun placement valide trouvé lors de la tentative {self.tentative}. Génération d'un nouveau jeu...")
 
-                # Afficher le messagebox avec un clic automatique sur OK
-                self.controller.after(500, lambda: messagebox.showinfo("Nouveau Jeu", "Un nouveau jeu a été généré car l'ancien n'était pas résolvable."))
-                self.controller.after(1500, lambda: self.nouveau_jeu())  # Générer un nouveau jeu après 1,5s
+                self.nouveau_jeu()
                 return  # Arrêter la boucle et laisser `self.nouveau_jeu()` relancer `resoudre()`
 
             # Affichage des résultats une fois une solution trouvée

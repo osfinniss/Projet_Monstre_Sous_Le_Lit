@@ -2,6 +2,7 @@ from pycsp3 import *
 import json
 
 pieces_path = "data/pieces.json"
+plateau_path = "data/plateau1.json"
 
 #Renvoie la version de la pièce sur laquelle on a appliqué la rotation indiquée en paramètre
 #On suppose qu'une sous-grille est de taille 3*3
@@ -26,7 +27,7 @@ def rotation(piece_originale,rotation):
             piece_tournee.append(3 * (2 - (piece_originale[i] % 3)) + (piece_originale[i] // 3))
     return piece_tournee
 
-def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
+def resoudre_defi(fichier_defis, fichier_pieces=pieces_path, fichier_plateau=plateau_path):
     """Résout un défi à partir d'un fichier JSON ou d'une structure JSON en mémoire"""
 
     clear()
@@ -39,9 +40,27 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
     else:
         raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
 
+    if isinstance(fichier_plateau, str):  # Si on passe un chemin de fichier
+        with open(fichier_plateau, "r") as f:
+            plateau = json.load(f)["plateau"]
+    elif isinstance(fichier_plateau, dict):  # Si on passe un objet JSON déjà chargé
+        plateau = fichier_plateau["plateau"]
+    else:
+        raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
     
-    for i in range(len(defi)):
-        print("defi[",i,"] vaut ", defi[i])
+
+    # Transformation du JSON en grille de tableau de tableaux
+    grille = []
+    for grille_data in plateau:
+        # Pour chaque grille, on a une liste de 9 entiers, obtenus en aplatissant les 3x3 cases
+        flattened_row = []
+        for row in grille_data["cases"]:
+            flattened_row.extend(row)  # Aplatir chaque ligne
+        grille.append(flattened_row)  # Ajouter la ligne aplatie à la grille
+
+    # print(f"chemin = {fichier_plateau}")
+    print(f"grille = {grille}")
+
     
     #On représente la grille par 4 sous-grilles avec 9 cases
     #Chaque entier représentera un monstre, -1 représentera une case vide
@@ -54,13 +73,6 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path):
     #5=slime
     #6=troll
     #7=yeti
-
-    grille = [
-        [-1,1,4,7,-1,0,2,-1,-1],
-        [1,5,-1,-1,7,0,2,3,-1],
-        [1,4,3,7,0,-1,3,5,6],
-        [-1,-1,-1,5,1,6,7,3,0]
-    ]
 
     #Chaque pièce est représentée par les indices des cases qu'elles recouvrent dans une sous-grille
 

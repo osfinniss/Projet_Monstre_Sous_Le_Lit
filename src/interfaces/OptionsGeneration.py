@@ -60,9 +60,9 @@ class OptionsGeneration(tk.Frame):
         
         btn_plateau.pack(side="top", padx=5, pady=20)
 
-        # Bouton Générer uniquement de nouvelles pièces
+        # Bouton Générer nouveau plateau mais créer nouvelles pièces soi-meme
         btn_pieces = tk.Button(self.main_frame, text="Nouveau plateau et pièces à créer soit-même", font=("Arial", 14, "bold"), bg="blue", fg="white",
-                               command=lambda: self.resoudre_avec_generations, width=50)
+                               command=self.resoudre_avec_generations, width=50)
         btn_pieces.pack(side="top", padx=5, pady=20)
 
 
@@ -84,5 +84,5 @@ class OptionsGeneration(tk.Frame):
 
     def nouveau_jeu(self):
         """Génère un nouveau jeu"""
-        from src.interfaces.NouvellePagePlateau import NouvellePagePlateau  # Import différé pour éviter la boucle d'import
-        self.controller.changer_interface(NouvellePagePlateau)
+        from src.interfaces.LoadingPage import LoadingPage
+        self.controller.changer_interface(LoadingPage, counter_values=self.counter_values)

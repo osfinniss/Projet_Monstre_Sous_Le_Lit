@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-
+import json
 class CreationPieces(tk.Frame):
 
     def __init__(self, controller, counter_values):
@@ -144,13 +144,15 @@ class CreationPieces(tk.Frame):
             return
         
         json_pieces = {"pieces": self.pieces}
+        with open("data/pieces_nouvelles_created.json", "w") as f:
+            json.dump(json_pieces, f, indent=4)
 
-        from src.interfaces.Resolution import Resolution
-        self.controller.changer_interface(Resolution, counter_values=self.counter_values, fichier_pieces=json_pieces)
+        from src.interfaces.LoadingPage import LoadingPage
+        self.controller.changer_interface(LoadingPage, self.counter_values, json_pieces, True)
 
     def retour_option_generation(self):
         from src.interfaces.OptionsGeneration import OptionsGeneration
-        self.controller.changer_interface(OptionsGeneration, self.num_defi, self.counter_values)
+        self.controller.changer_interface(OptionsGeneration, self.counter_values)
     
 def toggle_button(button, var):
     if var.get():
