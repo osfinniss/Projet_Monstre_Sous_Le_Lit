@@ -84,6 +84,8 @@ def resoudre_defi(fichier_defis, fichier_pieces=pieces_path, fichier_plateau=pla
         pieces = fichier_pieces["pieces"]
     else:
         raise ValueError("Données invalides : fournir un chemin de fichier ou un objet JSON.")
+    
+    print(f"piece = {pieces}")
 
     # Pièces de test, qui ne nécessitent pas de rotation pour le défi 1
     # pieces = [

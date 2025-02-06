@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 from src.solveur import resoudre_defi, rotation
 
 
-class Resolution(tk.Frame):
+class ResolutionGenerated(tk.Frame):
 
     images_path = [
         "data/images/monsters/bat.png",

@@ -1,14 +1,14 @@
 import json
 import random
 import time
-from tkinter import messagebox
 from src.solveur import resoudre_defi
 
-class NewResolution:
+class NewResolutionPieces:
 
     fichier_plateau = "data/plateau1.json"
+    fichier_pieces = "data/pieces_nouvelles_created.json"
 
-    def __init__(self, fichier_defi, fichier_pieces, controller):
+    def __init__(self, fichier_defi, controller):
         """
         Initialise la résolution d'un défi avec possibilité de regénérer un nouveau jeu si nécessaire.
 
@@ -17,11 +17,11 @@ class NewResolution:
         :param controller: Instance du contrôleur de l'application (Tkinter).
         """
         self.fichier_defi = fichier_defi
-        self.fichier_pieces = fichier_pieces
+        self.pieces_data = self.charger_json(self.fichier_pieces)
         self.controller = controller  # Contrôleur Tkinter pour gérer les interfaces
         self.tentative = 0
 
-        print(f"🔍 NewResolution chargée avec {fichier_defi} et {fichier_pieces}")
+        print(f"🔍 NewResolution chargée avec {fichier_defi}")
 
     def charger_json(self, fichier):
         """
@@ -62,14 +62,9 @@ class NewResolution:
         self.fichier_plateau = "data/plateau_nouveau.json"
         with open("data/plateau_nouveau.json", "w") as f:
             json.dump(plateau_data, f, indent=4)
-        
-        self.pieces_data = {"pieces": [sorted(random.sample(range(9), 6)) for _ in range(4)]}
-        with open("data/pieces_nouvelles.json", "w") as f:
-            json.dump(self.pieces_data, f, indent=4)
 
         print("🔄 Nouveau jeu généré automatiquement.")
 
-        # Afficher un message et cliquer automatiquement sur "OK" après 1 seconde
         return self.resoudre()
 
     def resoudre(self):
@@ -83,16 +78,15 @@ class NewResolution:
 
             # Charger les fichiers JSON
             defi_data = self.charger_json(self.fichier_defi)
-            pieces_data = self.charger_json(self.fichier_pieces)
             plateau_data = self.charger_json(self.fichier_plateau)
 
-            if not defi_data or not pieces_data:
+            if not defi_data:
                 print("⚠️ Impossible de résoudre le défi en raison d'erreurs de chargement des fichiers.")
                 return
 
             # Extraire les monstres et les pièces
             monstres = defi_data.get("monstres", [])
-            pieces = pieces_data.get("pieces", [])
+            pieces = self.pieces_data.get("pieces", [])
             plateau = plateau_data.get("plateau", [])
 
             if not monstres or not pieces:

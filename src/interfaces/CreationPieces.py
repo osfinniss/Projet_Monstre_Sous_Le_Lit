@@ -148,11 +148,11 @@ class CreationPieces(tk.Frame):
             json.dump(json_pieces, f, indent=4)
 
         from src.interfaces.LoadingPage import LoadingPage
-        self.controller.changer_interface(LoadingPage, self.counter_values, json_pieces, True)
+        self.controller.changer_interface(LoadingPage, counter_values=self.counter_values, fichier_pieces=json_pieces, pieces_created=True)
 
     def retour_option_generation(self):
         from src.interfaces.OptionsGeneration import OptionsGeneration
-        self.controller.changer_interface(OptionsGeneration, self.counter_values)
+        self.controller.changer_interface(OptionsGeneration, counter_values=self.counter_values)
     
 def toggle_button(button, var):
     if var.get():

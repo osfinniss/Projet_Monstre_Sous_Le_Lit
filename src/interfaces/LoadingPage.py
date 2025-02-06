@@ -57,11 +57,13 @@ class LoadingPage(tk.Frame):
         # Lancer l'animation
         self.animate_gif(0)  # Commencer avec la première frame
 
-
-        if self.pieces_created:
-            print(f"nouveau plateau généré avec les pieces : {self.pieces}")
-        else:
-            self.nouveau_jeu()
+        if self.nouveau_jeu():
+            if self.pieces_created:
+                from src.interfaces.ResolutionGenerated import ResolutionGenerated
+                self.controller.changer_interface(ResolutionGenerated, num_defi=-1, counter_values=self.counter_values, fichier_pieces="data/pieces_nouvelles_created.json", defi_generated=True )
+            else:
+                from src.interfaces.Resolution import Resolution
+                self.controller.changer_interface(Resolution, num_defi=-1, counter_values=self.counter_values, fichier_pieces="data/pieces_nouvelles.json", defi_generated=True )
 
 
     def animate_gif(self, frame_index):
@@ -103,8 +105,8 @@ class LoadingPage(tk.Frame):
         if self.pieces_created:
             print("######### RESOLUTION ##############")
 
-            from src.interfaces.NewResolution import NewResolution
-            resolution = NewResolution("data/new_defi.json","data/pieces_nouvelles_created.json",self.controller)
+            from src.interfaces.NewResolutionPieces import NewResolutionPieces
+            resolution = NewResolutionPieces("data/new_defi.json",self.controller)
         else:
             # Générer de nouvelles pièces
             pieces_data = {"pieces": [sorted(random.sample(range(9), 6)) for _ in range(4)]}

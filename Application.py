@@ -1,9 +1,7 @@
 import tkinter as tk
 from src.interfaces.MenuPrincipal import MenuPrincipal
-from src.interfaces.SelectionDefis import SelectionDefis
-from src.interfaces.SelectionDefisValides import SelectionDefisValides
 from src.interfaces.Resolution import Resolution
-from src.interfaces.CreationDefis import CreationDefis
+from src.interfaces.ResolutionGenerated import ResolutionGenerated
 from src.interfaces.CreationPieces import CreationPieces
 from src.interfaces.OptionsGeneration import OptionsGeneration
 from src.interfaces.LoadingPage import LoadingPage
@@ -11,6 +9,7 @@ from src.interfaces.LoadingPage import LoadingPage
 DEFAULT_NUM_DEFI = -1
 DEFAULT_COUNTER_VALUES = None
 DEFAULT_FICHIER_PIECES = "data/pieces.json"
+DEFAULT_FICHIER_PLATEAU = "data/plateau1.json"
 DEFAULT_DEFI_GENERATED = False
 DEFAULT_PIECE_CREATED = False
 
@@ -44,7 +43,8 @@ class Application(tk.Tk):
                           counter_values=DEFAULT_COUNTER_VALUES, 
                           fichier_pieces=DEFAULT_FICHIER_PIECES,
                           defi_generated=DEFAULT_DEFI_GENERATED,
-                          pieces_created=DEFAULT_PIECE_CREATED):
+                          pieces_created=DEFAULT_PIECE_CREATED,
+                          fichier_plateau=DEFAULT_FICHIER_PLATEAU):
         
         """Change l'interface et redimensionne si nécessaire."""
         for widget in self.winfo_children():
@@ -59,7 +59,10 @@ class Application(tk.Tk):
             self.interface.pack(expand=True, fill="both")
 
         elif nouvelle_interface == Resolution :
-            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces, defi_generated)
+            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces, defi_generated, fichier_plateau)
+            self.interface.grid(row=0, column=0, sticky="nsew")
+        elif nouvelle_interface == ResolutionGenerated :
+            self.interface = nouvelle_interface(self, num_defi, counter_values, fichier_pieces, defi_generated, "data/plateau_nouveau.json")
             self.interface.grid(row=0, column=0, sticky="nsew")
         else:
             self.interface = nouvelle_interface(self)
