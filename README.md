@@ -24,3 +24,6 @@ ensuite augmenter progressivement le nombre de défis à satisfaire.
 ## Interface graphique
 Réaliser une interface permettant de jouer à ce jeu et d’utiliser les aides à la conception de jeu qui
 auront été mises en œuvre. 
+
+
+## Réalisé par CUVELIER Corentin, DEHAYE Gabriel et FINNISS Oswald Billy
