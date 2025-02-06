@@ -9,13 +9,6 @@ class NewResolutionPieces:
     fichier_pieces = "data/pieces_nouvelles_created.json"
 
     def __init__(self, fichier_defi, controller):
-        """
-        Initialise la résolution d'un défi avec possibilité de regénérer un nouveau jeu si nécessaire.
-
-        :param fichier_defi: Chemin vers le fichier JSON contenant les monstres à trouver.
-        :param fichier_pieces: Chemin vers le fichier JSON contenant les pièces disponibles.
-        :param controller: Instance du contrôleur de l'application (Tkinter).
-        """
         self.fichier_defi = fichier_defi
         self.pieces_data = self.charger_json(self.fichier_pieces)
         self.controller = controller  # Contrôleur Tkinter pour gérer les interfaces
@@ -24,12 +17,6 @@ class NewResolutionPieces:
         print(f"🔍 NewResolution chargée avec {fichier_defi}")
 
     def charger_json(self, fichier):
-        """
-        Charge un fichier JSON et retourne son contenu.
-
-        :param fichier: Chemin du fichier JSON à charger.
-        :return: Contenu du fichier JSON sous forme de dictionnaire ou None en cas d'erreur.
-        """
         try:
             with open(fichier, "r") as f:
                 data = json.load(f)
@@ -41,11 +28,6 @@ class NewResolutionPieces:
         return None
 
     def generer_plateau_aleatoire(self):
-        """
-        Génère un plateau aléatoire avec des monstres placés aléatoirement.
-
-        :return: Dictionnaire représentant un plateau aléatoire.
-        """
         return {
             "plateau": [
                 {"grille_id": i + 1, "cases": [[random.choice([-1] + list(range(8))) for _ in range(3)] for _ in range(3)]}
@@ -54,10 +36,6 @@ class NewResolutionPieces:
         }
 
     def nouveau_jeu(self):
-        """
-        Génère un nouveau plateau et de nouvelles pièces, les enregistre dans des fichiers JSON,
-        puis relance automatiquement la résolution.
-        """
         plateau_data = self.generer_plateau_aleatoire()
         self.fichier_plateau = "data/plateau_nouveau.json"
         with open("data/plateau_nouveau.json", "w") as f:
@@ -68,10 +46,6 @@ class NewResolutionPieces:
         return self.resoudre()
 
     def resoudre(self):
-        """
-        Tente de résoudre le défi en utilisant les pièces disponibles.
-        Si la résolution échoue, génère un nouveau jeu et réessaie jusqu'à obtenir une solution valide.
-        """
         while True:
             self.tentative = self.tentative + 1
             print(f"🔄 Tentative de résolution {self.tentative} en cours...")

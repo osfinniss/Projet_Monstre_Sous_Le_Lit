@@ -7,13 +7,13 @@ Le descriptif du jeu est disponible ici : https://www.smartgames.eu/fr/jeux-pour
 Il existe d’autres variantes de ce même jeu (Cache-cache Safari ou encore Pirates Cache-cache).
 ## Objectifs
 L’objectif du projet est d’utiliser la programmation par contraintes pour résoudre plusieurs tâches.
-• Moteur de résolution : il s’agira de modéliser le problème sous forme d’un problème de
+- Moteur de résolution : il s’agira de modéliser le problème sous forme d’un problème de
 satisfaction de contraintes (CSP). Ce modèle permettra alors de calculer la solution unique
 d’un défi donné. Il est possible d’utiliser les ressources disponibles pour trouver les défis.
 Vous analyser la difficulté des défis relativement à la difficulté de la résolution de votre CSP.
-• Générateur de défis : utiliser le modèle précédent pour générer des défis réalisables, c’est-àdire pour lesquels il n’existe qu’une seule solution. On pourra demander à l’utilisateur de
+- Générateur de défis : utiliser le modèle précédent pour générer des défis réalisables, c’est-àdire pour lesquels il n’existe qu’une seule solution. On pourra demander à l’utilisateur de
 fournir un défi et vérifier s’il est jouable.
-• Construire un nouveau jeu : on pourra fixer dans un premier temps un plateau de jeu avec
+- Construire un nouveau jeu : on pourra fixer dans un premier temps un plateau de jeu avec
 des dessins ainsi que les formes des pièces à cacher. Les paramètres sont alors le nombre de
 dessins différents ainsi que le nombre d’occurrences de chaque dessin. On devra alors
 générer la liste des défis réalisables. Il sera intéressant d’autoriser la modification des formes

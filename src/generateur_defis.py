@@ -60,8 +60,6 @@ class GenerateurDefis(tk.Frame):
         with open(fichier_sortie, "w") as f:
             json.dump(defis_valides, f, indent=4)
 
-        messagebox.showinfo("Succès", f"{nb_defis} défis valides ont été générés.")
-
         from src.interfaces.SelectionDefisValides import SelectionDefisValides
         self.controller.changer_interface(SelectionDefisValides, resize=True)
 

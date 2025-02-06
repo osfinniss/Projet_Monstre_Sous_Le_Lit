@@ -1,6 +1,5 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from src.interfaces.NouvellePagePlateau import NouvellePagePlateau
 from PIL import Image, ImageTk
 
 class OptionsGeneration(tk.Frame):
