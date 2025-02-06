@@ -1,5 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from src.interfaces.NouvellePagePlateau import NouvellePagePlateau
+from PIL import Image, ImageTk
 
 class OptionsGeneration(tk.Frame):
 
@@ -54,12 +56,13 @@ class OptionsGeneration(tk.Frame):
 
         # Bouton Générer uniquement un nouveau plateau
         btn_plateau = tk.Button(self.main_frame, text="Nouveau plateau et pièces", font=("Arial", 14, "bold"), bg="blue", fg="white",
-                               command=lambda: self.resoudre_avec_generations(False), width=50)
+                               command=lambda: self.nouveau_jeu(), width=50)
+        
         btn_plateau.pack(side="top", padx=5, pady=20)
 
         # Bouton Générer uniquement de nouvelles pièces
         btn_pieces = tk.Button(self.main_frame, text="Nouveau plateau et pièces à créer soit-même", font=("Arial", 14, "bold"), bg="blue", fg="white",
-                               command=lambda: self.resoudre_avec_generations(True), width=50)
+                               command=lambda: self.resoudre_avec_generations, width=50)
         btn_pieces.pack(side="top", padx=5, pady=20)
 
 
@@ -69,13 +72,17 @@ class OptionsGeneration(tk.Frame):
         btn_retour.pack(side="bottom", padx=5, pady=20)
 
 
-    def resoudre_avec_generations(self, nouvellesPieces):
-        if nouvellesPieces:
-            from src.interfaces.CreationPieces import CreationPieces  # Import différé pour éviter la boucle d'import
-            self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)
+    def resoudre_avec_generations(self):
+        from src.interfaces.CreationPieces import CreationPieces  # Import différé pour éviter la boucle d'import
+        self.controller.changer_interface(CreationPieces, num_defi=-1, counter_values=self.counter_values)
         
 
     def retour_menu_defis(self):
         """Retourne à l'interface de sélection de défis"""
         from src.interfaces.SelectionDefis import SelectionDefis  # Import différé pour éviter la boucle d'import
         self.controller.changer_interface(SelectionDefis)
+
+    def nouveau_jeu(self):
+        """Génère un nouveau jeu"""
+        from src.interfaces.NouvellePagePlateau import NouvellePagePlateau  # Import différé pour éviter la boucle d'import
+        self.controller.changer_interface(NouvellePagePlateau)
